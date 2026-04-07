@@ -1,0 +1,33 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+*.log
+backend/*.out
+frontend/*.out
+backend/*.pid
+frontend/*.pid
+
+# Large Data & Models
+# data/
+# models/
+# NOTE: If you want to exclude them, uncomment above. 
+# For now, we will keep them if they are small, but avoid derived data.
+data/processed/*.npy
+data/raw/
+models/**/*.pth
+models/**/*.keras
+models/**/*.tflite
+models/**/*.h5
+
+# OS Files
+.DS_Store
+Thumbs.db
