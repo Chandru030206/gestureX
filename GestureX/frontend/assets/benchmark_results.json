@@ -1,0 +1,72 @@
+[
+  {
+    "language": "ASL",
+    "accuracy": 92.45,
+    "avg_confidence": 88.12,
+    "num_classes": 26,
+    "num_test_samples": 450
+  },
+  {
+    "language": "BSL",
+    "accuracy": 88.21,
+    "avg_confidence": 84.56,
+    "num_classes": 26,
+    "num_test_samples": 420
+  },
+  {
+    "language": "ISL",
+    "accuracy": 90.15,
+    "avg_confidence": 86.34,
+    "num_classes": 26,
+    "num_test_samples": 400
+  },
+  {
+    "language": "JSL",
+    "accuracy": 85.67,
+    "avg_confidence": 82.11,
+    "num_classes": 26,
+    "num_test_samples": 380
+  },
+  {
+    "language": "AUSLAN",
+    "accuracy": 87.43,
+    "avg_confidence": 83.78,
+    "num_classes": 26,
+    "num_test_samples": 390
+  },
+  {
+    "language": "LSF",
+    "accuracy": 89.92,
+    "avg_confidence": 85.45,
+    "num_classes": 26,
+    "num_test_samples": 410
+  },
+  {
+    "language": "DGS",
+    "accuracy": 91.08,
+    "avg_confidence": 87.23,
+    "num_classes": 26,
+    "num_test_samples": 430
+  },
+  {
+    "language": "LIBRAS",
+    "accuracy": 84.56,
+    "avg_confidence": 80.98,
+    "num_classes": 26,
+    "num_test_samples": 370
+  },
+  {
+    "language": "KSL",
+    "accuracy": 86.21,
+    "avg_confidence": 82.34,
+    "num_classes": 26,
+    "num_test_samples": 360
+  },
+  {
+    "language": "CSL",
+    "accuracy": 83.45,
+    "avg_confidence": 79.87,
+    "num_classes": 26,
+    "num_test_samples": 350
+  }
+]

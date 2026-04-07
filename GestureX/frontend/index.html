@@ -66,6 +66,23 @@
   .lang-btn.selected small { color:#ccc; }
   .lang-btn:hover:not(.selected) { background:#f5f5f5; }
 
+  .accuracy-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .accuracy-badge.excellent { background: #22c55e; color: #fff; }
+  .accuracy-badge.good { background: #eab308; color: #000; }
+  .accuracy-badge.fair { background: #f97316; color: #fff; }
+  .accuracy-badge.poor { background: #ef4444; color: #fff; }
+
   /* HOME — MODE BLOCK (SECONDARY) */
   .mode-section {
     padding: 32px 60px 40px;
@@ -239,16 +256,16 @@
   <div class="lang-section">
     <div class="section-label">Select Sign Language</div>
     <div class="lang-grid">
-      <button class="lang-btn selected" data-lang="ASL">ASL<small>American</small></button>
-      <button class="lang-btn" data-lang="BSL">BSL<small>British</small></button>
-      <button class="lang-btn" data-lang="ISL">ISL<small>Indian</small></button>
-      <button class="lang-btn" data-lang="JSL">JSL<small>Japanese</small></button>
-      <button class="lang-btn" data-lang="AUSLAN">AUSLAN<small>Australian</small></button>
-      <button class="lang-btn" data-lang="LSF">LSF<small>French</small></button>
-      <button class="lang-btn" data-lang="DGS">DGS<small>German</small></button>
-      <button class="lang-btn" data-lang="LIBRAS">LIBRAS<small>Brazilian</small></button>
-      <button class="lang-btn" data-lang="KSL">KSL<small>Korean</small></button>
-      <button class="lang-btn" data-lang="CSL">CSL<small>Chinese</small></button>
+      <button class="lang-btn selected" data-lang="ASL">ASL<small>American</small><div class="acc-container" data-lang="ASL"></div></button>
+      <button class="lang-btn" data-lang="BSL">BSL<small>British</small><div class="acc-container" data-lang="BSL"></div></button>
+      <button class="lang-btn" data-lang="ISL">ISL<small>Indian</small><div class="acc-container" data-lang="ISL"></div></button>
+      <button class="lang-btn" data-lang="JSL">JSL<small>Japanese</small><div class="acc-container" data-lang="JSL"></div></button>
+      <button class="lang-btn" data-lang="AUSLAN">AUSLAN<small>Australian</small><div class="acc-container" data-lang="AUSLAN"></div></button>
+      <button class="lang-btn" data-lang="LSF">LSF<small>French</small><div class="acc-container" data-lang="LSF"></div></button>
+      <button class="lang-btn" data-lang="DGS">DGS<small>German</small><div class="acc-container" data-lang="DGS"></div></button>
+      <button class="lang-btn" data-lang="LIBRAS">LIBRAS<small>Brazilian</small><div class="acc-container" data-lang="LIBRAS"></div></button>
+      <button class="lang-btn" data-lang="KSL">KSL<small>Korean</small><div class="acc-container" data-lang="KSL"></div></button>
+      <button class="lang-btn" data-lang="CSL">CSL<small>Chinese</small><div class="acc-container" data-lang="CSL"></div></button>
     </div>
   </div>
 
@@ -411,6 +428,36 @@
   </div>
   <footer>GESTUREX PLATFORM — 1.0.0</footer>
 </div>
+
+<script>
+// Accuracy Badge Logic
+async function loadAccuracyBadges() {
+  try {
+    const response = await fetch('assets/benchmark_results.json');
+    const data = await response.json();
+    
+    document.querySelectorAll('.acc-container').forEach(container => {
+      const lang = container.dataset.lang;
+      const result = data.find(r => r.language.toUpperCase() === lang.toUpperCase());
+      if (result) {
+        const acc = result.accuracy;
+        let cls = 'poor';
+        if (acc >= 90) cls = 'excellent';
+        else if (acc >= 85) cls = 'good';
+        else if (acc >= 75) cls = 'fair';
+        
+        container.innerHTML = `<span class="accuracy-badge ${cls}">${acc}% ACCURACY</span>`;
+      }
+    });
+  } catch (error) {
+    console.warn("Could not load accuracy data:", error);
+  }
+}
+
+// Call on load
+window.addEventListener('load', loadAccuracyBadges);
+
+</script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════

@@ -292,11 +292,77 @@
             padding: 30px;
             background: #f5f5f5;
             margin-bottom: 20px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        .gesture-visual video,
+        .gesture-visual img {
+            max-width: 100%;
+            max-height: 180px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .fingerspell-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .fingerspell-title {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fingerspell-grid {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .fingerspell-char {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fingerspell-char img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            background: white;
+            z-index: 2;
+        }
+
+        .fingerspell-char .char-fallback {
+            z-index: 1;
         }
 
         .gesture-emoji {
             font-size: 4rem;
             line-height: 1;
+            margin-bottom: 10px;
         }
 
         .gesture-word {
@@ -582,6 +648,41 @@
         let currentAudio = null;
         let comparisonData = null;
 
+        // SpreadTheSign API Helper (FIX B)
+        async function fetchGestureMedia(lang, word) {
+            const spreadTheSignLangCodes = {
+                asl: 'en.us',
+                bsl: 'en.gb', 
+                isl: 'hi.in',
+                jsl: 'ja.jp',
+                auslan: 'en.au',
+                lsf: 'fr.fr',
+                dgs: 'de.de',
+                libras: 'pt.br',
+                ksl: 'ko.kr',
+                csl: 'zh.cn'
+            };
+            
+            const langCode = spreadTheSignLangCodes[lang.toLowerCase()] || 'en.us';
+            const searchURL = `https://api.spreadthesign.com/v1/search/${langCode}/${word}`;
+            
+            try {
+                // Check if local file exists first (FIX A)
+                // Since we can't easily check for file existence in browser without a 404,
+                // we'll try to load it in the UI and use fallbacks.
+                
+                const res = await fetch(searchURL);
+                const data = await res.json();
+                if (data?.results?.[0]?.video_url) {
+                    return { type: 'video', url: data.results[0].video_url };
+                }
+            } catch (e) {
+                console.log(`SpreadTheSign failed for ${lang}/${word}`);
+            }
+            
+            return { type: 'fingerspell', word: word, lang: lang };
+        }
+
         // Initialize
         async function init() {
             try {
@@ -715,7 +816,7 @@
             document.getElementById('loading-state').style.display = 'none';
         }
 
-        function displayResults(data) {
+        async function displayResults(data) {
             document.getElementById('result-word').textContent = data.word.toUpperCase();
             document.getElementById('results-count').textContent = 
                 `${data.total_languages} languages`;
@@ -723,21 +824,42 @@
             const grid = document.getElementById('comparison-grid');
             grid.innerHTML = '';
 
-            data.comparisons.forEach((comp, index) => {
-                const card = createComparisonCard(comp, index);
+            // Process comparisons sequentially to handle async media fetching
+            for (let i = 0; i < data.comparisons.length; i++) {
+                const comp = data.comparisons[i];
+                const card = await createComparisonCard(comp, i, data.word);
                 grid.appendChild(card);
-            });
+            }
 
             document.getElementById('results-section').style.display = 'block';
         }
 
-        function createComparisonCard(comp, index) {
+        async function createComparisonCard(comp, index, searchWord) {
             const card = document.createElement('div');
             card.className = 'comparison-card';
             
             const stepsHTML = comp.gesture_steps.map((step, i) => 
                 `<li data-step="${i + 1}.">${step}</li>`
             ).join('');
+
+            // Media Logic (FIX A, B, C)
+            const langCode = comp.language.toLowerCase();
+            const word = searchWord.toLowerCase();
+            const localMP4 = `/gestures/${langCode}/${word}.mp4`;
+            
+            // Generate visual content
+            let visualContent = '';
+            
+            // We'll prioritize local MP4, then API, then fingerspell
+            // For simplicity in this demo, we'll use a placeholder structure and let it load
+            visualContent = `
+                <video src="${localMP4}" autoplay loop muted playsinline 
+                    onerror="handleMediaError(this, '${langCode}', '${word}')">
+                </video>
+                <div class="gesture-fallback" style="display:none">
+                    <div class="gesture-emoji">${comp.emoji}</div>
+                </div>
+            `;
 
             card.innerHTML = `
                 <div class="card-header">
@@ -748,8 +870,8 @@
                     <span class="lang-badge">${comp.language}</span>
                 </div>
 
-                <div class="gesture-visual">
-                    <div class="gesture-emoji">${comp.emoji}</div>
+                <div class="gesture-visual" id="visual-${index}">
+                    ${visualContent}
                     <div class="gesture-word">${comp.word}</div>
                 </div>
 
@@ -783,6 +905,39 @@
             audioBtn.addEventListener('click', () => playAudio(comp.audio_url, audioBtn));
 
             return card;
+        }
+
+        async function handleMediaError(videoEl, lang, word) {
+            const parent = videoEl.parentElement;
+            
+            // Try SpreadTheSign API (FIX B)
+            const media = await fetchGestureMedia(lang, word);
+            
+            if (media.type === 'video') {
+                videoEl.onerror = () => renderFingerspellFallback(parent, word);
+                videoEl.src = media.url;
+            } else {
+                renderFingerspellFallback(parent, word);
+            }
+        }
+
+        function renderFingerspellFallback(container, word) {
+            container.innerHTML = `
+                <div style="display:flex; flex-direction:column; align-items:center; width:100%;">
+                    <p style="font-size:0.7rem; color:#888; margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Media Fallback: Fingerspell</p>
+                    <div class="fingerspell-grid" style="display:flex; flex-wrap:wrap; gap:5px; justify-content:center; margin-bottom:10px;">
+                        ${word.toUpperCase().split('').map(char => `
+                            <div class="fingerspell-char">
+                                <span class="char-fallback">${char}</span>
+                                <img src="assets/alphabet/${char}.png" 
+                                     onerror="this.style.display='none'" 
+                                     alt="${char}">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="gesture-word">${word.toUpperCase()}</div>
+            `;
         }
 
         function playAudio(url, button) {
