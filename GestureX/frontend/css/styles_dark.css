@@ -1,0 +1,277 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #000000;
+  min-height: 100vh;
+}
+
+h1.app-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #000000;
+  text-align: left;
+  padding: 32px 40px 16px 40px;
+  letter-spacing: 2px;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #666666;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #000000;
+  margin: 0 40px 40px 40px;
+}
+
+.mode-card {
+  padding: 40px;
+  border: 1px solid #000000;
+  background: #FFFFFF;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.mode-card:hover {
+  background: #F5F5F5;
+}
+
+.mode-card.compare {
+  grid-column: 1 / 3;
+  background: #F5F5F5;
+}
+
+.mode-card h2 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #000000;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.mode-card p {
+  font-size: 0.95rem;
+  color: #666666;
+}
+
+.language-section {
+  margin: 0 40px 40px 40px;
+}
+
+.language-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.lang-btn {
+  padding: 16px 20px;
+  border: 1px solid #000000;
+  background: #FFFFFF;
+  color: #000000;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+  min-width: 80px;
+  text-align: center;
+}
+
+.lang-btn span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #666666;
+  margin-top: 4px;
+}
+
+.lang-btn.selected {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+.lang-btn.selected span {
+  color: #CCCCCC;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  border: 1px solid #000000;
+  background: #FFFFFF;
+  color: #000000;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.back-btn:hover {
+  background: #F5F5F5;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+  border-bottom: 1px solid #000000;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+.lang-badge {
+  padding: 8px 16px;
+  background: #000000;
+  color: #FFFFFF;
+  font-weight: 900;
+  font-size: 1rem;
+  border-radius: 0;
+}
+
+.camera-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  padding: 24px 40px;
+}
+
+.camera-box {
+  border: 1px solid #000000;
+}
+
+.camera-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #666666;
+  letter-spacing: 2px;
+  padding: 8px;
+  border-bottom: 1px solid #000000;
+}
+
+video {
+  width: 320px;
+  height: 240px;
+  display: block;
+  background: #000000;
+}
+
+.detection-panel {
+  border: 1px solid #000000;
+  padding: 24px;
+}
+
+.detected-word {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #000000;
+  margin: 16px 0;
+}
+
+.confidence-bar-track {
+  height: 4px;
+  background: #E5E5E5;
+  margin: 8px 0;
+}
+
+.confidence-bar-fill {
+  height: 4px;
+  background: #000000;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.fingerspell-box {
+  border: 1px solid #000000;
+  padding: 24px;
+  margin: 0 40px;
+  min-height: 80px;
+}
+
+.name-banner {
+  margin: 16px 40px;
+  padding: 20px;
+  background: #F5F5F5;
+  border: 1px solid #000000;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.sentence-box {
+  margin: 16px 40px;
+  border: 1px solid #000000;
+  padding: 24px;
+}
+
+.sentence-textarea {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #000000;
+  padding: 12px;
+  font-size: 1rem;
+  resize: none;
+  font-family: Arial, sans-serif;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  background: #000000;
+  color: #FFFFFF;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-top: 12px;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+.word-input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #000000;
+  font-size: 1.1rem;
+  border-radius: 0;
+  outline: none;
+}
+
+.show-btn {
+  padding: 16px 32px;
+  background: #000000;
+  color: #FFFFFF;
+  border: none;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.8rem;
+  color: #999999;
+  border-top: 1px solid #E5E5E5;
+  margin-top: 40px;
+}

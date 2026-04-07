@@ -1,0 +1,61 @@
+INFO:     Will watch for changes in these directories: ['/Users/chandrurajinikanth/Desktop/gesture project/GestureX/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [25344] using StatReload
+INFO:     Started server process [25348]
+INFO:     Waiting for application startup.
+2026-04-07 10:27:49,349 - app - INFO - 🚀 Starting GestureX Backend...
+2026-04-07 10:27:49,349 - sign_language_db - INFO - Loaded 15 sign languages
+2026-04-07 10:27:49,349 - app - INFO - ✓ Sign language database loaded (15 languages)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1775537869.481227   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+I0000 00:00:1775537869.487308   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+I0000 00:00:1775537869.492947   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+I0000 00:00:1775537869.499864   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.503568   86419 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.503573   86413 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.503991   86397 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.508029   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.512211   86429 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.518659   86419 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.519806   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.520676   86397 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.521555   86439 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.523860   86413 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.528188   86429 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.528678   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.531265   86443 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.536736   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.544303   86453 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.547285   86441 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.547441   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.552480   86461 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.553768   86449 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.559273   86468 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.562761   86454 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.569055   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.573902   86464 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.576019   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.576197   86474 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.585686   86466 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.587246   86474 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.593416   86485 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.599355   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+I0000 00:00:1775537869.608748   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.612115   86493 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.616724   86483 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.622234   86490 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.623535   86501 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.630533   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+W0000 00:00:1775537869.635299   86503 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+I0000 00:00:1775537869.636748   86248 gl_context.cc:357] GL version: 2.1 (2.1 Metal - 89.4), renderer: Apple M1
+2026-04-07 10:27:49,637 - app - INFO - ✓ Gesture recognizers initialized (15 languages)
+2026-04-07 10:27:49,637 - app - INFO - ✓ Speech-to-gesture engine initialized
+2026-04-07 10:27:49,637 - app - INFO - ✅ GestureX Backend ready!
+INFO:     Application startup complete.
+W0000 00:00:1775537869.638706   86509 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.643470   86519 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.649132   86506 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1775537869.653511   86518 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+INFO:     127.0.0.1:49627 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49629 - "GET /health HTTP/1.1" 200 OK

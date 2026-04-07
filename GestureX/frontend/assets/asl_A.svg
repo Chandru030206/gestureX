@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" aria-label="ASL letter A">
+  <!-- Background circle -->
+  <rect width="100%" height="100%" fill="none"/>
+  <!-- Fist base -->
+  <path d="M12 36c0-6 6-12 12-12h16c6 0 12 6 12 12v8c0 2-2 4-4 4H16c-2 0-4-2-4-4v-8z" fill="#222"/>
+  <!-- Thumb along the side -->
+  <path d="M8 28c0 0 4-2 6 2s2 10-2 12-8-2-8-6 0-8 4-8z" fill="#222"/>
+  <!-- subtle outline to improve visibility -->
+  <path d="M12 36c0-6 6-12 12-12h16c6 0 12 6 12 12v8c0 2-2 4-4 4H16c-2 0-4-2-4-4v-8z" fill="none" stroke="#000" stroke-width="1" opacity="0.2"/>
+</svg>

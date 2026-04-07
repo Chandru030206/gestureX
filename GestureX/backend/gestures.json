@@ -1,0 +1,42 @@
+{
+  "HELLO": {
+    "description": "Wave hand gesture for greeting",
+    "examples": []
+  },
+  "THANK_YOU": {
+    "description": "Flat hand moving away from chin",
+    "examples": []
+  },
+  "YES": {
+    "description": "Fist nodding up and down",
+    "examples": []
+  },
+  "NO": {
+    "description": "Index and middle finger wagging side to side",
+    "examples": []
+  },
+  "PLEASE": {
+    "description": "Flat hand circling on chest",
+    "examples": []
+  },
+  "HELP": {
+    "description": "Thumbs up on flat palm, lifted upward",
+    "examples": []
+  },
+  "STOP": {
+    "description": "Open palm facing outward",
+    "examples": []
+  },
+  "OK": {
+    "description": "Thumb and index finger forming circle",
+    "examples": []
+  },
+  "PEACE": {
+    "description": "Index and middle finger in V shape",
+    "examples": []
+  },
+  "THUMBS_UP": {
+    "description": "Closed fist with thumb pointing up",
+    "examples": []
+  }
+}

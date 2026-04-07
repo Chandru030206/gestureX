@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestureX - Multi-Language Sign Comparison</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✋</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #000000;
+        }
+
+        .logo h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+        }
+
+        .logo .logo-x {
+            font-size: 1rem;
+            vertical-align: super;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 15px;
+            color: #666666;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid #000000;
+            padding: 10px 20px;
+            transition: all 0.15s;
+        }
+
+        .back-link:hover {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        /* Controls Section */
+        .controls {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .controls h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #666666;
+        }
+
+        .control-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #000000;
+            background: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .language-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .lang-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border: 2px solid #000000;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .lang-checkbox:hover {
+            background: #f5f5f5;
+        }
+
+        .lang-checkbox.selected {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .lang-checkbox input {
+            display: none;
+        }
+
+        .btn-compare {
+            padding: 15px 40px;
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-compare:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-compare:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Quick Words */
+        .quick-words {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .quick-words label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            color: #666666;
+        }
+
+        .word-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .word-btn {
+            padding: 10px 18px;
+            background: #ffffff;
+            border: 2px solid #000000;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .word-btn:hover,
+        .word-btn.active {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        /* Results Section */
+        .results {
+            margin-top: 40px;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #000000;
+        }
+
+        .results-header h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+        }
+
+        .results-count {
+            font-size: 0.8rem;
+            color: #666666;
+        }
+
+        /* Comparison Cards Grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 0;
+        }
+
+        .comparison-card {
+            background: #ffffff;
+            border: 2px solid #000000;
+            padding: 25px;
+            margin-left: -2px;
+            margin-top: -2px;
+            position: relative;
+        }
+
+        .comparison-card:first-child {
+            margin-left: 0;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .lang-info h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .lang-info .country {
+            font-size: 0.75rem;
+            color: #666666;
+            margin-top: 3px;
+        }
+
+        .lang-badge {
+            background: #000000;
+            color: #ffffff;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .gesture-visual {
+            text-align: center;
+            padding: 30px;
+            background: #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        .gesture-emoji {
+            font-size: 4rem;
+            line-height: 1;
+        }
+
+        .gesture-word {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 15px;
+            letter-spacing: 2px;
+        }
+
+        .card-section {
+            margin-bottom: 20px;
+        }
+
+        .card-section h4 {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #666666;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .gesture-steps {
+            list-style: none;
+        }
+
+        .gesture-steps li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .gesture-steps li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            font-weight: 800;
+            font-size: 0.75rem;
+        }
+
+        .hand-info {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hand-info span {
+            padding: 8px 12px;
+            background: #f5f5f5;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .audio-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-audio {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px;
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-audio:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-audio.playing {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666666;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e0e0e0;
+            border-top-color: #000000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            border: 2px solid #000000;
+            background: #f5f5f5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            color: #666666;
+            font-size: 0.9rem;
+        }
+
+        /* Play All Button */
+        .play-all-section {
+            margin-bottom: 30px;
+        }
+
+        .btn-play-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 18px 35px;
+            background: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-play-all:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            padding: 40px;
+            border-top: 3px solid #000000;
+            text-align: left;
+        }
+
+        .footer-brand {
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .footer p {
+            font-size: 0.8rem;
+            color: #666666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .control-row {
+                flex-direction: column;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-card {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>GESTURE<span class="logo-x">X</span></h1>
+            </div>
+            <p class="subtitle">Multi-Language Sign Comparison</p>
+            <a href="index.html" class="back-link">← Back to Main App</a>
+        </header>
+
+        <!-- Controls -->
+        <section class="controls">
+            <h2>Select Word & Languages</h2>
+            
+            <div class="control-row">
+                <div class="control-group">
+                    <label>Word to Compare</label>
+                    <select id="word-select">
+                        <option value="">Select a word...</option>
+                    </select>
+                </div>
+                
+                <button class="btn-compare" id="compare-btn" disabled>
+                    Compare Across Languages
+                </button>
+            </div>
+
+            <div class="quick-words">
+                <label>Quick Select</label>
+                <div class="word-buttons" id="word-buttons">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="quick-words">
+                <label>Languages to Compare (select multiple)</label>
+                <div class="language-checkboxes" id="language-checkboxes">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="results" id="results-section" style="display: none;">
+            <div class="results-header">
+                <h2>Comparison Results: "<span id="result-word"></span>"</h2>
+                <span class="results-count" id="results-count"></span>
+            </div>
+
+            <div class="play-all-section">
+                <button class="btn-play-all" id="play-all-btn">
+                    🔊 Play All Audio Explanations
+                </button>
+            </div>
+
+            <div class="comparison-grid" id="comparison-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state">
+            <h3>Select a Word to Compare</h3>
+            <p>Choose a word above to see how it's expressed differently across sign languages.</p>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Loading comparisons...</p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-brand">GestureX</div>
+            <p>Multi-Language Sign Language Communication Platform</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let availableWords = [];
+        let availableLanguages = [];
+        let selectedLanguages = new Set();
+        let currentAudio = null;
+        let comparisonData = null;
+
+        // Initialize
+        async function init() {
+            try {
+                const response = await fetch(`${API_BASE}/api/multilang/available`);
+                const data = await response.json();
+                
+                availableWords = data.words;
+                availableLanguages = data.languages;
+                
+                populateWordSelect();
+                populateWordButtons();
+                populateLanguageCheckboxes();
+                
+                // Select all languages by default
+                availableLanguages.forEach(lang => {
+                    selectedLanguages.add(lang.code);
+                });
+                updateLanguageCheckboxes();
+                
+            } catch (error) {
+                console.error('Failed to load data:', error);
+            }
+        }
+
+        function populateWordSelect() {
+            const select = document.getElementById('word-select');
+            availableWords.forEach(word => {
+                const option = document.createElement('option');
+                option.value = word;
+                option.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+                select.appendChild(option);
+            });
+            
+            select.addEventListener('change', (e) => {
+                updateCompareButton();
+                highlightWordButton(e.target.value);
+            });
+        }
+
+        function populateWordButtons() {
+            const container = document.getElementById('word-buttons');
+            availableWords.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.textContent = word.toUpperCase();
+                btn.dataset.word = word;
+                btn.addEventListener('click', () => selectWord(word));
+                container.appendChild(btn);
+            });
+        }
+
+        function populateLanguageCheckboxes() {
+            const container = document.getElementById('language-checkboxes');
+            availableLanguages.forEach(lang => {
+                const label = document.createElement('label');
+                label.className = 'lang-checkbox';
+                label.innerHTML = `
+                    <input type="checkbox" value="${lang.code}" checked>
+                    <span>${lang.code}</span>
+                `;
+                label.querySelector('input').addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        selectedLanguages.add(lang.code);
+                    } else {
+                        selectedLanguages.delete(lang.code);
+                    }
+                    updateLanguageCheckboxes();
+                    updateCompareButton();
+                });
+                container.appendChild(label);
+            });
+        }
+
+        function updateLanguageCheckboxes() {
+            document.querySelectorAll('.lang-checkbox').forEach(label => {
+                const input = label.querySelector('input');
+                if (selectedLanguages.has(input.value)) {
+                    label.classList.add('selected');
+                    input.checked = true;
+                } else {
+                    label.classList.remove('selected');
+                    input.checked = false;
+                }
+            });
+        }
+
+        function selectWord(word) {
+            document.getElementById('word-select').value = word;
+            highlightWordButton(word);
+            updateCompareButton();
+        }
+
+        function highlightWordButton(word) {
+            document.querySelectorAll('.word-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.word === word);
+            });
+        }
+
+        function updateCompareButton() {
+            const word = document.getElementById('word-select').value;
+            const btn = document.getElementById('compare-btn');
+            btn.disabled = !word || selectedLanguages.size === 0;
+        }
+
+        // Compare functionality
+        document.getElementById('compare-btn').addEventListener('click', compare);
+
+        async function compare() {
+            const word = document.getElementById('word-select').value;
+            if (!word) return;
+
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('loading-state').style.display = 'block';
+
+            try {
+                const langsParam = Array.from(selectedLanguages).join(',');
+                const response = await fetch(
+                    `${API_BASE}/api/multilang/compare/${word}?languages=${langsParam}`
+                );
+                const data = await response.json();
+                
+                comparisonData = data;
+                displayResults(data);
+                
+            } catch (error) {
+                console.error('Comparison failed:', error);
+                alert('Failed to load comparison data');
+            }
+
+            document.getElementById('loading-state').style.display = 'none';
+        }
+
+        function displayResults(data) {
+            document.getElementById('result-word').textContent = data.word.toUpperCase();
+            document.getElementById('results-count').textContent = 
+                `${data.total_languages} languages`;
+            
+            const grid = document.getElementById('comparison-grid');
+            grid.innerHTML = '';
+
+            data.comparisons.forEach((comp, index) => {
+                const card = createComparisonCard(comp, index);
+                grid.appendChild(card);
+            });
+
+            document.getElementById('results-section').style.display = 'block';
+        }
+
+        function createComparisonCard(comp, index) {
+            const card = document.createElement('div');
+            card.className = 'comparison-card';
+            
+            const stepsHTML = comp.gesture_steps.map((step, i) => 
+                `<li data-step="${i + 1}.">${step}</li>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="lang-info">
+                        <h3>${comp.language_name}</h3>
+                        <div class="country">${comp.country}</div>
+                    </div>
+                    <span class="lang-badge">${comp.language}</span>
+                </div>
+
+                <div class="gesture-visual">
+                    <div class="gesture-emoji">${comp.emoji}</div>
+                    <div class="gesture-word">${comp.word}</div>
+                </div>
+
+                <div class="card-section">
+                    <h4>Description</h4>
+                    <p class="description">${comp.description}</p>
+                </div>
+
+                <div class="card-section">
+                    <h4>Step-by-Step</h4>
+                    <ol class="gesture-steps">${stepsHTML}</ol>
+                </div>
+
+                <div class="card-section">
+                    <h4>Technical Details</h4>
+                    <div class="hand-info">
+                        <span>🤚 ${comp.hand_shape}</span>
+                        <span>↔️ ${comp.movement}</span>
+                    </div>
+                </div>
+
+                <div class="audio-section">
+                    <button class="btn-audio" data-audio="${comp.audio_url}" data-index="${index}">
+                        🔊 Play Audio Explanation
+                    </button>
+                </div>
+            `;
+
+            // Add audio click handler
+            const audioBtn = card.querySelector('.btn-audio');
+            audioBtn.addEventListener('click', () => playAudio(comp.audio_url, audioBtn));
+
+            return card;
+        }
+
+        function playAudio(url, button) {
+            // Stop any currently playing audio
+            if (currentAudio) {
+                currentAudio.pause();
+                document.querySelectorAll('.btn-audio').forEach(btn => {
+                    btn.classList.remove('playing');
+                    btn.textContent = '🔊 Play Audio Explanation';
+                });
+            }
+
+            if (!url) {
+                alert('Audio not available');
+                return;
+            }
+
+            const audio = new Audio(`${API_BASE}${url}`);
+            currentAudio = audio;
+
+            button.classList.add('playing');
+            button.textContent = '⏸️ Playing...';
+
+            audio.play();
+
+            audio.addEventListener('ended', () => {
+                button.classList.remove('playing');
+                button.textContent = '🔊 Play Audio Explanation';
+                currentAudio = null;
+            });
+
+            audio.addEventListener('error', () => {
+                button.classList.remove('playing');
+                button.textContent = '🔊 Play Audio Explanation';
+                alert('Failed to play audio');
+            });
+        }
+
+        // Play All functionality
+        document.getElementById('play-all-btn').addEventListener('click', playAllAudio);
+
+        async function playAllAudio() {
+            if (!comparisonData) return;
+
+            const btn = document.getElementById('play-all-btn');
+            btn.textContent = '🔊 Playing All...';
+            btn.disabled = true;
+
+            for (const comp of comparisonData.comparisons) {
+                if (comp.audio_url) {
+                    await playAudioPromise(comp.audio_url);
+                    // Small pause between languages
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+            }
+
+            btn.textContent = '🔊 Play All Audio Explanations';
+            btn.disabled = false;
+        }
+
+        function playAudioPromise(url) {
+            return new Promise((resolve) => {
+                const audio = new Audio(`${API_BASE}${url}`);
+                audio.addEventListener('ended', resolve);
+                audio.addEventListener('error', resolve);
+                audio.play();
+            });
+        }
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>

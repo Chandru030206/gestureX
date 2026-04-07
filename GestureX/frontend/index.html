@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestureX Duo</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+  body { background:#fff; color:#000; }
+  
+  /* PAGES */
+  .page { display:none; }
+  .page.active { display:block; }
+  
+  /* HOME PAGE */
+  .home-header {
+    position:relative;
+    padding: 36px 40px 28px;
+    text-align:center;
+    border-bottom:1px solid #e5e5e5;
+  }
+  .home-title {
+    font-size:3.4rem; font-weight:900;
+    text-transform:uppercase; letter-spacing:3px;
+    color:#000; display:inline-block;
+  }
+  .status-pill {
+    position:absolute; top:50%; right:40px;
+    transform:translateY(-50%);
+    display:flex; align-items:center; gap:8px;
+    border:1px solid #ddd; padding:6px 14px;
+    font-size:0.75rem; font-weight:700; color:#333;
+    background:#fff;
+  }
+  .status-dot {
+    width:8px; height:8px;
+    background:#22c55e; border-radius:50%;
+    display:inline-block;
+  }
+
+  /* HOME — LANGUAGE BLOCK (PRIMARY) */
+  .lang-section {
+    padding: 36px 60px 32px;
+    border-bottom: 2px solid #000;
+  }
+  .section-label {
+    font-size:0.72rem; font-weight:700; color:#666;
+    letter-spacing:4px; text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  .lang-grid {
+    display:flex; flex-wrap:wrap; gap:12px;
+  }
+  .lang-btn {
+    padding:20px 24px; border:1px solid #000;
+    background:#fff; cursor:pointer;
+    font-weight:900; font-size:1.15rem;
+    min-width:100px; text-align:center;
+    transition: background 0.15s;
+  }
+  .lang-btn small {
+    display:block; font-size:0.78rem;
+    font-weight:400; color:#555; margin-top:6px;
+  }
+  .lang-btn.selected { background:#000; color:#fff; }
+  .lang-btn.selected small { color:#ccc; }
+  .lang-btn:hover:not(.selected) { background:#f5f5f5; }
+
+  /* HOME — MODE BLOCK (SECONDARY) */
+  .mode-section {
+    padding: 32px 60px 40px;
+  }
+  .mode-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid #000;
+  }
+  .mode-card {
+    pointer-events: auto !important;
+    cursor: pointer;
+    padding:28px 24px;
+    border:1px solid #000;
+    cursor:pointer;
+    background:#fff;
+  }
+  .mode-card:hover { background:#f5f5f5; }
+  .mode-card.full-width {
+    grid-column:1/3;
+    background:#f5f5f5;
+  }
+  .mode-card h2 {
+    font-size:1.25rem; font-weight:900;
+    text-transform:uppercase; margin-bottom:8px;
+  }
+  .mode-card p { font-size:0.85rem; color:#666; line-height:1.5; }
+
+  /* INNER PAGES */
+  .page-header {
+    display:flex; align-items:center;
+    justify-content:space-between;
+    padding:20px 40px;
+    border-bottom:1px solid #000;
+  }
+  .back-btn {
+    padding:10px 20px; border:1px solid #000;
+    background:#fff; font-weight:700;
+    cursor:pointer; font-size:0.9rem;
+  }
+  .back-btn:hover { background:#f5f5f5; }
+  .page-title {
+    font-size:1.4rem; font-weight:900;
+    text-transform:uppercase;
+  }
+  .lang-badge {
+    padding:8px 18px; background:#000;
+    color:#fff; font-weight:900; font-size:1rem;
+  }
+
+  /* GESTURE PAGE */
+  .gesture-body { padding:24px 40px; }
+  .cam-detect-row {
+    display:grid; grid-template-columns:320px 1fr; gap:20px;
+    margin-bottom:20px;
+  }
+  .cam-wrap { border:1px solid #000; }
+  .cam-label {
+    font-size:0.65rem; font-weight:700; color:#666;
+    letter-spacing:2px; padding:6px 10px;
+    border-bottom:1px solid #000; text-transform:uppercase;
+  }
+  video { width:320px; height:240px; display:block; background:#000; }
+  .detect-panel { border:1px solid #000; padding:24px; }
+  .detect-label {
+    font-size:0.65rem; font-weight:700; color:#666;
+    letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:12px;
+  }
+  .detect-word {
+    font-size:3rem; font-weight:900; margin-bottom:8px;
+  }
+  .conf-track {
+    height:3px; background:#e5e5e5; margin:8px 0;
+  }
+  .conf-fill {
+    height:3px; background:#000; width:0%;
+    transition:width 0.3s;
+  }
+  .conf-text { font-size:0.85rem; color:#666; }
+
+  .finger-box {
+    border:1px solid #000; padding:20px;
+    margin-bottom:16px; min-height:70px;
+  }
+  .name-banner {
+    padding:18px; background:#f5f5f5;
+    border:1px solid #000; text-align:center;
+    font-weight:900; text-transform:uppercase;
+    margin-bottom:16px;
+  }
+  .sentence-box { border:1px solid #000; padding:20px; }
+  textarea {
+    width:100%; min-height:80px; border:1px solid #000;
+    padding:10px; font-size:1rem; resize:none;
+    font-family:Arial,sans-serif; margin-bottom:12px;
+  }
+  .action-btn {
+    padding:10px 22px; background:#000; color:#fff;
+    border:none; font-weight:700; cursor:pointer;
+    font-size:0.85rem; text-transform:uppercase;
+    margin-right:8px;
+  }
+  .action-btn:hover { background:#333; }
+
+  /* SPEECH PAGE */
+  .speech-body { padding:24px 40px; }
+  .input-row { display:flex; margin-bottom:16px; }
+  .word-input {
+    flex:1; padding:16px; border:1px solid #000;
+    font-size:1rem; outline:none;
+  }
+  .show-btn {
+    padding:16px 28px; background:#000; color:#fff;
+    border:none; font-weight:900; cursor:pointer;
+    font-size:1rem; text-transform:uppercase;
+  }
+  .sign-result {
+    border:1px solid #000; padding:32px;
+    min-height:200px; text-align:center;
+  }
+  .sign-emoji { font-size:4rem; margin-bottom:16px; }
+  .sign-title { font-size:1.4rem; font-weight:900; margin-bottom:12px; }
+  .sign-desc { font-size:1rem; color:#333; margin-bottom:16px; }
+  .sign-tip { font-size:0.85rem; color:#666; margin-bottom:20px; }
+  .finger-letters {
+    font-size:2rem; font-weight:900; letter-spacing:4px;
+  }
+
+  /* COMPARE PAGE */
+  .compare-body { padding:24px 40px; }
+  .compare-input-row { display:flex; margin-bottom:24px; }
+  .compare-grid {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:16px;
+  }
+  .compare-card {
+    border:1px solid #000; padding:20px;
+  }
+  .compare-lang { font-weight:900; font-size:1rem; margin-bottom:8px; }
+  .compare-desc { font-size:0.85rem; color:#333; }
+
+  footer {
+    text-align:center; padding:20px;
+    font-size:0.75rem; color:#999;
+    border-top:1px solid #e5e5e5; margin-top:40px;
+  }
+</style>
+</head>
+<body>
+
+<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+    <h2 id="loadMsg1" style="font-size:2rem; font-weight:900; margin-bottom:12px;">Loading Model...</h2>
+    <p id="loadMsg2" style="font-size:1.2rem; margin-bottom:24px;">Initializing gesture mappings...</p>
+    <p id="loadMsg3" style="color:#d32f2f; font-weight:bold; font-size:1rem; letter-spacing:1px; background:#ffebee; padding:8px 16px; border:1px solid #c62828;">⚠ Cross-prediction lock: ACTIVE</p>
+</div>
+
+
+<!-- HOME PAGE -->
+<div id="homePage" class="page active">
+
+  <!-- Top Header: Centered Title + Status Pill -->
+  <div class="home-header">
+    <h1 class="home-title">GESTUREX PLATFORM — DUO</h1>
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      GestureX Duo &nbsp;|&nbsp; localhost
+    </div>
+  </div>
+
+  <!-- PRIMARY: Language Selection -->
+  <div class="lang-section">
+    <div class="section-label">Select Sign Language</div>
+    <div class="lang-grid">
+      <button class="lang-btn selected" data-lang="ASL">ASL<small>American</small></button>
+      <button class="lang-btn" data-lang="BSL">BSL<small>British</small></button>
+      <button class="lang-btn" data-lang="ISL">ISL<small>Indian</small></button>
+      <button class="lang-btn" data-lang="JSL">JSL<small>Japanese</small></button>
+      <button class="lang-btn" data-lang="AUSLAN">AUSLAN<small>Australian</small></button>
+      <button class="lang-btn" data-lang="LSF">LSF<small>French</small></button>
+      <button class="lang-btn" data-lang="DGS">DGS<small>German</small></button>
+      <button class="lang-btn" data-lang="LIBRAS">LIBRAS<small>Brazilian</small></button>
+      <button class="lang-btn" data-lang="KSL">KSL<small>Korean</small></button>
+      <button class="lang-btn" data-lang="CSL">CSL<small>Chinese</small></button>
+    </div>
+  </div>
+
+  <!-- SECONDARY: Mode Selection -->
+  <div class="mode-section">
+    <div class="section-label">Choose Mode</div>
+    <div class="mode-grid">
+      <div class="mode-card" id="gestureCard">
+        <h2>Gesture to Speech</h2>
+        <p>Show signs with your hands — hear them spoken aloud in real-time</p>
+      </div>
+      <div class="mode-card" id="speechCard">
+        <h2>Speech to Gesture</h2>
+        <p>Type or speak words — see the sign language gestures displayed</p>
+      </div>
+      <div class="mode-card full-width" id="compareCard">
+        <h2>Compare Languages</h2>
+        <p>See how the SAME word is signed differently across all 10 languages</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>GESTUREX PLATFORM — 1.0.0</footer>
+</div>
+
+<!-- GESTURE TO SPEECH PAGE -->
+<div id="gesturePage" class="page">
+  <div class="page-header" style="flex-wrap: wrap;">
+    <button class="back-btn" id="backFromGesture">← BACK</button>
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+        <span class="page-title">Gesture to Speech</span>
+        <span id="gestureBreadcrumb" style="font-size:0.75rem; letter-spacing:1px; color:#555; margin-top:4px;">Mode: Gesture to Speech | Language: None</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="lang-badge" id="gestureLangBadge" style="background:#f5f5f5; color:#000; border:1px solid #000; padding:6px 12px;">--</span>
+        <button id="gestureChangeLangBtn" onclick="doChangeLanguage()" style="background:#000; color:#fff; border:none; padding:6px 12px; font-weight:bold; font-size:0.7rem; cursor:pointer; letter-spacing:1px;">CHANGE LANGUAGE</button>
+    </div>
+  </div>
+
+  <!-- Model & language context panel — updates on every language switch -->
+  <div id="gestureModelPanel" style="
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 40px; border-bottom:1px solid #000;
+    background:#fafafa; font-size:0.78rem;
+  ">
+    <div>
+      <span style="font-weight:700;letter-spacing:2px;color:#666;font-size:0.65rem">ACTIVE MODEL</span><br/>
+      <span id="gestureModelName" style="font-weight:900;font-size:1rem">asl_alphabet_m1.pth</span>
+    </div>
+    <div style="text-align:center">
+      <span style="font-weight:700;letter-spacing:2px;color:#666;font-size:0.65rem">ALPHABET TYPE</span><br/>
+      <span id="gestureAlphaType" style="font-weight:700">One-handed (ASL)</span>
+    </div>
+    <div style="text-align:right">
+      <span style="font-weight:700;letter-spacing:2px;color:#666;font-size:0.65rem">CHAR SET</span><br/>
+      <span id="gestureCharSet" style="font-weight:700;font-size:0.9rem">A–Z + space, del, nothing</span>
+    </div>
+  </div>
+
+  <!-- Cross-prediction block warning (shown only when non-ASL selected) -->
+  <div id="gestureLangWarning" style="
+    display:none; padding:8px 40px;
+    background:#000; color:#fff;
+    font-size:0.75rem; font-weight:700; letter-spacing:2px;
+  ">&#x26A0; CROSS-PREDICTION BLOCKED — Only <span id="gestureLangName">ASL</span> character mappings active</div>
+
+  <div class="gesture-body">
+    <div class="cam-detect-row">
+      <div class="cam-wrap">
+        <div class="cam-label">Live Feed</div>
+        <video id="videoFeed" autoplay playsinline muted></video>
+      </div>
+      <div class="detect-panel">
+        <div class="detect-label">Detected Gesture <span id="gestureFlagEmoji" style="font-size:1.2rem;margin-left:6px">🇺🇸</span></div>
+        <div class="detect-word" id="detectedWord">—</div>
+        <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+        <div class="conf-text" id="confText">0%</div>
+      </div>
+    </div>
+    <div class="finger-box">
+      <div class="detect-label">Fingerspell (Live)</div>
+      <div id="fingerLetters" style="font-size:1.5rem;font-weight:900;letter-spacing:4px;margin-top:8px"></div>
+    </div>
+    <div class="name-banner" id="nameBanner">Your name will appear here</div>
+    <div class="sentence-box">
+      <div class="detect-label">Current Sentence</div>
+      <textarea id="sentenceArea" placeholder="Detected signs in selected language will appear here..."></textarea>
+      <button class="action-btn" id="speakBtn">Speak</button>
+      <button class="action-btn" id="copyBtn">Copy</button>
+      <button class="action-btn" id="clearBtn">Clear</button>
+    </div>
+  </div>
+  <footer>GESTUREX PLATFORM — 1.0.0</footer>
+</div>
+
+<!-- SPEECH TO GESTURE PAGE -->
+<div id="speechPage" class="page">
+  <div class="page-header" style="flex-wrap: wrap;">
+    <button class="back-btn" id="backFromSpeech">← BACK</button>
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+        <span class="page-title">Speech to Gesture</span>
+        <span id="speechBreadcrumb" style="font-size:0.75rem; letter-spacing:1px; color:#555; margin-top:4px;">Mode: Speech to Gesture | Language: None</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+        <span class="lang-badge" id="speechLangBadge" style="background:#f5f5f5; color:#000; border:1px solid #000; padding:6px 12px;">--</span>
+        <button id="speechChangeLangBtn" onclick="doChangeLanguage()" style="background:#000; color:#fff; border:none; padding:6px 12px; font-weight:bold; font-size:0.7rem; cursor:pointer; letter-spacing:1px;">CHANGE LANGUAGE</button>
+    </div>
+  </div>
+  <div class="speech-body">
+
+    <!-- Live language info banner — updated every time language changes -->
+    <div id="speechLangInfo" style="
+      border:1px solid #000; padding:14px 20px;
+      margin-bottom:16px; display:flex;
+      align-items:flex-start; justify-content:space-between; gap:16px;
+    ">
+      <div>
+        <div style="font-size:0.65rem;font-weight:700;color:#666;letter-spacing:3px;margin-bottom:4px">ACTIVE LIBRARY</div>
+        <div id="speechLibLabel" style="font-size:1.25rem;font-weight:900">ASL — American Sign Language</div>
+        <div id="speechHandType" style="font-size:0.8rem;color:#555;margin-top:4px">☝️ One-handed manual alphabet</div>
+        <div id="speechGrammar" style="font-size:0.75rem;color:#888;margin-top:4px">Grammar: SOV word order</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:0.65rem;font-weight:700;color:#666;letter-spacing:3px;margin-bottom:4px">WORDS IN LIBRARY</div>
+        <div id="speechWordCount" style="font-size:1.4rem;font-weight:900">24</div>
+        <div id="speechSpecial" style="font-size:0.7rem;color:#999;margin-top:4px;max-width:160px;text-align:right"></div>
+      </div>
+    </div>
+
+    <!-- Try words hint -->
+    <div id="speechHint" style="font-size:0.75rem;color:#999;margin-bottom:12px;letter-spacing:1px"></div>
+
+    <div class="input-row">
+      <input class="word-input" id="wordInput"
+             placeholder="Type a word (e.g. hello, thank you)..." />
+      <button class="show-btn" id="showBtn">SHOW</button>
+    </div>
+    <div class="sign-result" id="signResult">
+      <p style="color:#999">Select a language above, then type a word and click SHOW</p>
+    </div>
+  </div>
+  <footer>GESTUREX PLATFORM — 1.0.0</footer>
+</div>
+
+<!-- COMPARE PAGE -->
+<div id="comparePage" class="page">
+  <div class="page-header">
+    <button class="back-btn" id="backFromCompare">← BACK</button>
+    <span class="page-title">Compare Languages</span>
+    <span class="lang-badge">ALL</span>
+  </div>
+  <div class="compare-body">
+    <div class="compare-input-row" style="display:flex; justify-content:center; gap:12px; margin-bottom:24px;">
+      <input class="word-input" id="compareInput" 
+             placeholder="Type a word or phrase..." style="flex:1; max-width:400px; padding:12px 16px; border:2px solid #000; font-size:1.1rem; border-radius:0; outline:none;" />
+      <button class="show-btn" id="compareSpeakBtn" style="background:#f0f0f0; color:#000; border:2px solid #000; padding:12px 24px; font-weight:bold; cursor:pointer;" title="Use Voice Input">🎤 SPEAK</button>
+      <button class="show-btn" id="compareBtn" style="background:#000; color:#fff; border:none; padding:12px 24px; font-weight:bold; cursor:pointer;">COMPARE</button>
+    </div>
+    <div class="compare-grid" id="compareGrid"></div>
+  </div>
+  <footer>GESTUREX PLATFORM — 1.0.0</footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DUAL-STREAM SIGN LANGUAGE RECOGNITION ENGINE
+//  Streams: (1) Alpha/Fingerspell  (2) Word/Gloss
+//  Confidence threshold: 85% before any output is committed
+// ═══════════════════════════════════════════════════════════════
+
+// ─── 1. GLOBAL STATE ─────────────────────────────────────────
+const CONFIDENCE_THRESHOLD = 85;       // Minimum % to accept any prediction
+const ALPHA_PAUSE_MS        = 1800;    // Silence gap → finalise fingerspelled word
+const WORD_COOLDOWN_MS      = 2200;    // Prevent duplicate word commits
+const SMOOTH_WINDOW         = 7;       // Frames kept in temporal buffer
+const STABLE_REQUIRED       = 4;       // Consecutive same-label frames to confirm
+
+let CURRENT_LANGUAGE  = null;  // ◄ Canonical global — set once per language click
+let SELECTED_LANGUAGE = null;  // alias — kept in sync by initLanguage()
+let currentStream     = null;          // Camera MediaStream
+let handsInstance     = null;
+
+// Smoothing / temporal
+let frameBuffer   = [];                // Last N word predictions
+let letterFrames  = [];                // Last N letter predictions
+let lastWord      = "";
+let lastWordTime  = 0;
+
+// Fingerspell alpha stream state
+let alphaBuffer   = [];                // Running letter sequence
+let alphaTimer    = null;              // Finalise timer
+let lastLetter    = "";
+let lastLetterTime = 0;
+
+// Sentence construction
+let sentenceWords = [];
+
+// ─── 2. LANGUAGE-SPECIFIC GLOSS DICTIONARIES ─────────────────
+// Per-language word ↔ gesture mapping + grammar syntax
+// (SOV = Subject-Object-Verb, SVO = Subject-Verb-Object, etc.)
+const LANG_CONFIG = {
+  ASL:    { syntax:"SOV",  country:"American" },
+  BSL:    { syntax:"SVO",  country:"British"  },
+  ISL:    { syntax:"SOV",  country:"Indian"   },
+  JSL:    { syntax:"SOV",  country:"Japanese" },
+  AUSLAN: { syntax:"SVO",  country:"Australian" },
+  LSF:    { syntax:"SVO",  country:"French"   },
+  DGS:    { syntax:"SOV",  country:"German"   },
+  LIBRAS: { syntax:"SVO",  country:"Brazilian"},
+  KSL:    { syntax:"SOV",  country:"Korean"   },
+  CSL:    { syntax:"SVO",  country:"Chinese"  }
+};
+
+// Core gloss-to-word dictionary (shared base, language-filtered at output)
+const GLOSS_VOCAB = {
+  HELLO:     { emoji:"👋", conf:92 },
+  "I LOVE YOU":{ emoji:"🤟", conf:90 },
+  YES:       { emoji:"✅", conf:88 },
+  NO:        { emoji:"❌", conf:88 },
+  PLEASE:    { emoji:"🙏", conf:87 },
+  HELP:      { emoji:"🆘", conf:86 },
+  STOP:      { emoji:"🛑", conf:87 },
+  GOOD:      { emoji:"👍", conf:86 },
+  BAD:       { emoji:"👎", conf:85 },
+  MORE:      { emoji:"➕", conf:84 },
+  SORRY:     { emoji:"😔", conf:87 },
+  THANK_YOU: { emoji:"🙏", conf:89 },
+  WATER:     { emoji:"💧", conf:86 },
+  EAT:       { emoji:"🍽️", conf:87 },
+  HOME:      { emoji:"🏠", conf:85 }
+};
+
+// Per-language description overrides for Speech→Gesture page
+const LANG_DESCRIPTIONS = {
+  ASL:{
+    "hello":    "Raise open hand to forehead, wave outward (salute-style)",
+    "thank you":"Flat fingers touch chin, sweep forward",
+    "yes":      "Fist nods up and down",
+    "no":       "Index + middle tap thumb twice",
+    "please":   "Flat hand circles clockwise on chest",
+    "sorry":    "Fist circles on chest",
+    "help":     "Fist on palm, both lift upward",
+    "stop":     "Chop dominant hand onto flat palm",
+    "good":     "Fingers touch chin, hand sweeps forward",
+    "bad":      "Fingers touch chin, hand flips down"
+  },
+  BSL:{
+    "hello":    "Two-handed wave, palms facing out",
+    "thank you":"Fingers tap lips then sweep forward",
+    "yes":      "Hand tilts forward at wrist",
+    "no":       "Index finger wags side to side",
+    "please":   "Open hand pats chest twice",
+    "sorry":    "Fist rubs chest in small circles",
+    "help":     "Flat hand rises with thumb up",
+    "stop":     "Both palms face out, push forward",
+    "good":     "Thumbs up with a small nod",
+    "bad":      "Thumbs down"
+  },
+  ISL:{
+    "hello":    "Single hand raised, palm forward, fingers together",
+    "thank you":"Both palms together at chin, bow slightly",
+    "yes":      "Head nod + closed fist lift",
+    "no":       "Head shake + flat hand wave",
+    "please":   "Joined palms pushed together twice",
+    "sorry":    "Fist taps chest with slight bow",
+    "help":     "Both hands clasp and lift",
+    "stop":     "One palm raised, the other pats it",
+    "good":     "Thumbs up + small forward movement",
+    "bad":      "Thumbs down + hand flip"
+  }
+};
+
+function getLangDesc(word) {
+  const lDesc = LANG_DESCRIPTIONS[SELECTED_LANGUAGE];
+  const base  = LANG_DESCRIPTIONS["ASL"];
+  return (lDesc && lDesc[word]) || (base && base[word]) || null;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LIBRARIES — Master lookup table  (JS equivalent of the Python LIBRARIES dict)
+// All metadata is declared here, inline — no dependency on LANG_DICT or ALPHABET_TYPE.
+// refreshSpeechPageInfo() reads exclusively from here so it works at any call time.
+// ═══════════════════════════════════════════════════════════════════
+const LIBRARIES = {
+  ASL: {
+    name:     "ASL — American Sign Language",
+    native:   "American Sign Language",
+    desc:     "One-handed manual alphabet. The most-studied sign language worldwide.",
+    grammar:  "SOV word order. Topic-comment structure. Facial expressions carry grammatical meaning.",
+    hands:    "one",
+    special:  "",
+    folder:   "asl",
+    count:    24,
+    examples: ["hello","thank you","sorry","help","love"],
+  },
+  BSL: {
+    name:     "BSL — British Sign Language",
+    native:   "British Sign Language",
+    desc:     "Two-handed manual alphabet. Visually distinct from ASL despite shared spoken language.",
+    grammar:  "SVO word order. Uses spatial grammar and body-shift for pronouns.",
+    hands:    "two",
+    special:  "Most letters use both hands",
+    folder:   "bsl",
+    count:    23,
+    examples: ["hello","thank you","deaf","friend","love"],
+  },
+  ISL: {
+    name:     "ISL — Indian Sign Language",
+    native:   "Indian Sign Language",
+    desc:     "One-handed alphabet, influenced by ASL. Used across India with regional variants.",
+    grammar:  "SOV word order. Head nods and tilts carry grammatical meaning.",
+    hands:    "one",
+    special:  "",
+    folder:   "isl",
+    count:    22,
+    examples: ["hello","thank you","please","help","family"],
+  },
+  JSL: {
+    name:     "JSL — Japanese Sign Language",
+    native:   "日本手話 (Nihon Shuwa)",
+    desc:     "One-handed syllable-based (kana) fingerspelling. Uses classifiers heavily.",
+    grammar:  "SOV word order. Verb always at end. Mouth patterns from Japanese speech.",
+    hands:    "one",
+    special:  "Uses syllable-based hand shapes (not letter-by-letter)",
+    folder:   "jsl",
+    count:    22,
+    examples: ["hello","thank you","please","eat","family"],
+  },
+  AUSLAN: {
+    name:     "AUSLAN — Australian Sign Language",
+    native:   "Australian Sign Language",
+    desc:     "Two-handed alphabet shared with BSL. Blends BSL grammar with ASL influences.",
+    grammar:  "SVO word order. Eyebrow raises signal yes/no questions.",
+    hands:    "two",
+    special:  "Same two-handed alphabet as BSL",
+    folder:   "auslan",
+    count:    22,
+    examples: ["hello","thank you","stop","friend","name"],
+  },
+  LSF: {
+    name:     "LSF — Langue des Signes Française",
+    native:   "Langue des Signes Française",
+    desc:     "One-handed French manual alphabet with specific regional variations. Parent of ASL.",
+    grammar:  "SVO word order. Gave rise to ASL via Laurent Clerc (1817).",
+    hands:    "one",
+    special:  "Includes accented letters: É, È, À, Ç",
+    folder:   "lsf",
+    count:    22,
+    examples: ["hello","thank you","mother","father","friend"],
+  },
+  DGS: {
+    name:     "DGS — Deutsche Gebärdensprache",
+    native:   "Deutsche Gebärdensprache",
+    desc:     "German Sign Language. One-handed alphabet with Umlaut-specific handshapes.",
+    grammar:  "SOV word order. Verb agreement and mouth patterns carry grammatical meaning.",
+    hands:    "one",
+    special:  "Unique handshapes for Ä, Ö, Ü and ß",
+    folder:   "dgs",
+    count:    26,
+    examples: ["hello","ä","ö","ü","ß"],
+  },
+  LIBRAS: {
+    name:     "LIBRAS — Língua Brasileira de Sinais",
+    native:   "Língua Brasileira de Sinais",
+    desc:     "Brazilian Sign Language. One-handed, influenced by LSF via French missionaries.",
+    grammar:  "SVO word order. Uses simultaneous construction and spatial grammar.",
+    hands:    "one",
+    special:  "Includes specific shapes for Ã and Ç",
+    folder:   "libras",
+    count:    22,
+    examples: ["hello","thank you","love","friend","water"],
+  },
+  KSL: {
+    name:     "KSL — Korean Sign Language",
+    native:   "한국 수어 (Hanguk Sueo)",
+    desc:     "Korean Sign Language. One-handed, historically influenced by JSL. Handshapes trace Hangul consonant strokes.",
+    grammar:  "SOV order. Topic-comment structure. Bowing is a pragmatic politeness marker.",
+    hands:    "one",
+    special:  "Hand shapes trace Hangul consonant strokes. JSL influence on vocabulary.",
+    folder:   "ksl",
+    count:    22,
+    examples: ["hello","thank you","please","friend","name"],
+  },
+  CSL: {
+    name:     "CSL — Chinese Sign Language",
+    native:   "中国手语 (Zhōngguó Shǒuyǔ)",
+    desc:     "Chinese Sign Language. One-handed system combining numeral shapes and radical strokes.",
+    grammar:  "SVO / topic-comment. Hand shapes derived from Chinese characters and numerals.",
+    hands:    "one",
+    special:  "Combines numeral and Chinese character radical shapes",
+    folder:   "csl",
+    count:    22,
+    examples: ["hello","thank you","water","love","name"],
+  },
+};
+
+// ── GestureLibraries — aliased from LANG_DICT after it is declared ──────────
+let GestureLibraries = {};   // filled at line ~1249 once LANG_DICT is ready
+
+// ── get_gesture(word, lang) — canonical branching lookup ────────────────────
+// TARGET_GESTURE = GestureLibraries[selectedLanguage][inputText]
+function get_gesture(word, lang) {
+  const w   = word.trim().toLowerCase();
+  const lib = GestureLibraries[lang];
+  
+  if (lib && lib[w]) {
+    return { ...lib[w], word: w, source: lang, isFallback: false, isFingerOnly: false };
+  }
+  
+  // STRICT REQUIREMENT: No ASL or other language fallbacks. Completely isolated.
+  return { emoji: "✋", desc: "", tip: "", word: w, source: lang, isFallback: false, isFingerOnly: true };
+}
+
+// ── Asset path helper (mirrors Python get_gesture folder logic) ──────────────
+// path = `assets/${selectedFolder}/${word}.gif`
+function get_asset_path(word, lang, ext = "gif") {
+  const folder = (LIBRARIES[lang] || LIBRARIES["ASL"]).folder;
+  return `assets/${folder}/${word.toLowerCase().replace(/\s+/g, "_")}.${ext}`;
+}
+
+// ── getGrammarNote() — pulled from LIBRARIES, no separate object needed ──────
+function getGrammarNote(lang) {
+  return (LIBRARIES[lang] || LIBRARIES["ASL"]).grammar;
+}
+
+// ── refreshSpeechPageInfo() — reads from LIBRARIES (no deferred deps) ────────
+// Called by: initLanguage(), showPage('speechPage'), and window load.
+function refreshSpeechPageInfo() {
+  const lang = SELECTED_LANGUAGE;
+  const lib  = LIBRARIES[lang] || LIBRARIES["ASL"];
+
+  // Word list from GestureLibraries if it's ready, else fall back to LIBRARIES.examples
+  const dictLib   = GestureLibraries[lang] || {};
+  const dictWords = Object.keys(dictLib);
+  const wordCount = dictWords.length > 0 ? dictWords.length : lib.count;
+  const examples  = dictWords.length > 0
+    ? dictWords.slice(0, 5).map(w => `"${w}"`).join(', ')
+    : lib.examples.map(w => `"${w}"`).join(', ');
+
+  const el = id => document.getElementById(id);
+  if (!el('speechLibLabel')) return;   // speech page not in DOM yet
+
+  // ── Update every element ────────────────────────────────────────
+  el('speechLangBadge').innerText = lang;
+  el('speechLibLabel').innerText  = lib.name;          // ← native full name
+  el('speechHandType').innerHTML  = lib.hands === "two"
+    ? "⚠️ <strong>TWO-HANDED</strong> manual alphabet"
+    : "☝️ One-handed manual alphabet";
+  el('speechGrammar').innerText   = `Grammar: ${lib.grammar}`;
+  el('speechWordCount').innerText = wordCount;
+  el('speechSpecial').innerText   = lib.special || "";
+  el('speechHint').innerHTML      = `<strong>Try:</strong> ${examples} &nbsp;(${wordCount} words in ${lang} library)`;
+
+  // ── Placeholder ──────────────────────────────────────────────────
+  const input = el('wordInput');
+  if (input) {
+    const ex0 = lib.examples[0] || "hello";
+    const ex1 = lib.examples[1] || "thank you";
+    input.placeholder = `Type a word in ${lib.native} (e.g. ${ex0}, ${ex1})…`;
+  }
+
+  // ── Live re-lookup if result already on screen ───────────────────
+  const result = el('signResult');
+  const inputEl = el('wordInput');
+  if (result && inputEl && inputEl.value.trim() &&
+      !result.textContent.includes('Select a language') &&
+      !result.textContent.includes('type a word')) {
+    showSign();
+  }
+}
+
+
+// ─── UTILS: Flag Map ──────────────────────────────────────────
+const flagMap = { "ASL":"🇺🇸", "BSL":"🇬🇧", "ISL":"🇮��", "JSL":"🇯🇵", "AUSLAN":"🇦🇺", "LSF":"🇫🇷", "DGS":"🇩🇪", "LIBRAS":"🇧🇷", "KSL":"🇰🇷", "CSL":"🇨🇳" };
+
+// ─── LANGUAGE INIT / RESET ──────────────────────────────────────
+function doChangeLanguage() {
+  stopCamera();
+  CURRENT_LANGUAGE = null;
+  SELECTED_LANGUAGE = null;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('sentenceArea').value = "";
+  showPage('homePage');
+}
+
+function triggerMode(pageId) {
+  console.log("Mode clicked:", pageId);
+  console.log("Selected language:", CURRENT_LANGUAGE);
+  
+  try {
+    if (!CURRENT_LANGUAGE) {
+      alert("Please select a sign language first");
+      return;
+    }
+    
+    const libName = LIBRARIES[CURRENT_LANGUAGE] ? LIBRARIES[CURRENT_LANGUAGE].name : CURRENT_LANGUAGE;
+    
+    const overlay = document.getElementById('loadingOverlay');
+    if (!overlay) {
+        console.error("loadingOverlay element is missing from DOM");
+        return;
+    }
+    
+    document.getElementById('loadMsg1').innerText = `Loading ${libName} Model...`;
+    document.getElementById('loadMsg2').innerText = `Initializing ${CURRENT_LANGUAGE} gesture mappings...`;
+    overlay.style.display = 'flex';
+    
+    setTimeout(() => {
+       overlay.style.display = 'none';
+       try {
+           showPage(pageId);
+       } catch (e) {
+           console.error("Error inside showPage():", e);
+       }
+       
+       try {
+           const flag = flagMap[CURRENT_LANGUAGE] || "🏳️";
+           const val = `${flag} ${CURRENT_LANGUAGE}`;
+           const bdgText = `Mode: ${pageId === 'gesturePage' ? 'Gesture to Speech' : 'Speech to Gesture'} | Language: ${CURRENT_LANGUAGE} — ${libName}`;
+           
+           if (pageId === 'gesturePage') {
+               const b = document.getElementById('gestureLangBadge'); if (b) b.innerText = val;
+               const br = document.getElementById('gestureBreadcrumb'); if (br) br.innerText = bdgText;
+               const emojiSpan = document.getElementById('gestureFlagEmoji');
+               if (emojiSpan) emojiSpan.innerText = flag;
+           } else if (pageId === 'speechPage') {
+               const b = document.getElementById('speechLangBadge'); if (b) b.innerText = val;
+               const br = document.getElementById('speechBreadcrumb'); if (br) br.innerText = bdgText;
+           }
+       } catch (e) {
+           console.error("Error setting headers:", e);
+       }
+
+    }, 1200);
+  } catch (err) {
+    console.error("Trigger validation crash:", err);
+    alert("Internal Error: " + err.message);
+  }
+}
+
+// ─── 3. LANGUAGE SELECTION ───────────────────────────────────
+// ── Language-specific character sets for Gesture → Speech ────────────────────
+// Classifier output labels are mapped through this table.
+// When CURRENT_LANGUAGE=DGS, only German chars are valid output.
+// Cross-prediction (e.g. ASL 'A' leaking into DGS output) is blocked.
+const CHAR_SETS = {
+  ASL:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['space','del','nothing']),
+            model: "asl_alphabet_m1.pth",
+            alpha: "One-handed (ASL)",
+            label: "A–Z + space, del, nothing" },
+  BSL:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['space']),
+            model: "bsl_alphabet_m1.pth",
+            alpha: "Two-handed (BSL)",
+            label: "A–Z two-handed" },
+  ISL:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['space']),
+            model: "isl_alphabet_m1.pth",
+            alpha: "One-handed (ISL)",
+            label: "A–Z + space" },
+  JSL:    { chars: ['あ','い','う','え','お','か','き','く','け','こ','space'],
+            model: "jsl_alphabet_m1.pth",
+            alpha: "One-handed (Kana syllables)",
+            label: "Kana syllables: あいうえおかきく..." },
+  DGS:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['Ä','Ö','Ü','ß','space']),
+            model: "dgs_alphabet_m1.pth",
+            alpha: "One-handed (DGS)",
+            label: "A–Z + Ä Ö Ü ß (German Umlauts)" },
+  AUSLAN: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['space']),
+            model: "auslan_alphabet_m1.pth",
+            alpha: "Two-handed (AUSLAN/BSL)",
+            label: "A–Z two-handed" },
+  LSF:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['É','È','À','Ç','space']),
+            model: "lsf_alphabet_m1.pth",
+            alpha: "One-handed (LSF)",
+            label: "A–Z + É È À Ç (French accents)" },
+  LIBRAS: { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['Ã','Ç','space']),
+            model: "libras_alphabet_m1.pth",
+            alpha: "One-handed (LIBRAS)",
+            label: "A–Z + Ã Ç (Brazilian accents)" },
+  KSL:    { chars: ['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ','space'],
+            model: "ksl_alphabet_m1.pth",
+            alpha: "One-handed (Hangul strokes)",
+            label: "Hangul consonants: ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ..." },
+  CSL:    { chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').concat(['1','2','3','4','5','space']),
+            model: "csl_alphabet_m1.pth",
+            alpha: "One-handed (CSL numeral+stroke)",
+            label: "A–Z + CJK numeral stroke shapes" },
+};
+
+// Update gesture page's model/charset panel whenever language changes
+function refreshGesturePageInfo() {
+  const lang   = CURRENT_LANGUAGE;
+  const cs     = CHAR_SETS[lang] || CHAR_SETS["ASL"];
+  const lib    = LIBRARIES[lang] || LIBRARIES["ASL"];
+  const isASL  = (lang === "ASL");
+
+  const el = id => document.getElementById(id);
+  if (!el('gestureModelName')) return;
+
+  // Header dropdown sync
+  
+
+  const flagMap = { "ASL":"🇺🇸", "BSL":"🇬🇧", "ISL":"🇮🇳", "JSL":"🇯🇵", "AUSLAN":"🇦🇺", "LSF":"🇫🇷", "DGS":"🇩🇪", "LIBRAS":"🇧🇷", "KSL":"🇰🇷", "CSL":"🇨🇳" };
+  el('gestureFlagEmoji').innerText = flagMap[lang] || "🏳️";
+
+  // Model panel
+  // path = `models/${cs.model}`  (the dynamic model path)
+  el('gestureModelName').innerText  = cs.model;
+  el('gestureAlphaType').innerText  = cs.alpha;
+  el('gestureCharSet').innerText    = cs.label;
+
+  // Cross-prediction warning banner
+  const warn = el('gestureLangWarning');
+  if (warn) {
+    warn.style.display  = isASL ? 'none' : 'block';
+    const nameSpan = el('gestureLangName');
+    if (nameSpan) nameSpan.innerText = lib.name;
+  }
+}
+
+function initLanguage(lang) {
+  CURRENT_LANGUAGE  = lang;
+  SELECTED_LANGUAGE = lang;    // keep alias in sync
+
+  // Update dropdown selection if existing
+  
+
+  alphaBuffer = [];
+  frameBuffer = [];
+  letterFrames = [];
+  sentenceWords = [];
+  document.getElementById('sentenceArea').value = "";
+  document.getElementById('fingerLetters').innerText = "";
+  document.getElementById('nameBanner').innerText = "Your name will appear here";
+  document.getElementById('detectedWord').innerText = "—";
+  document.getElementById('confFill').style.width = "0%";
+  document.getElementById('confText').innerText = "0%";
+  
+  refreshSpeechPageInfo();
+  refreshGesturePageInfo();
+}
+
+function switchLanguageContext(langCode) {
+  stopCamera();
+  initLanguage(langCode);
+  
+  // Update the visual representation on the homepage as well
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('selected', b.dataset.lang === langCode);
+  });
+
+  document.getElementById('detectedWord').innerText = `Loading ${langCode} model...`;
+  
+  setTimeout(() => {
+    document.getElementById('detectedWord').innerText = "—";
+    if (document.getElementById('gesturePage').classList.contains('active')) {
+      startCamera();
+    }
+  }, 800); // Simulate model reload and switch
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id !== 'gesturePage') stopCamera();
+  if (id === 'gesturePage') { startCamera(); refreshGesturePageInfo(); }
+  if (id === 'speechPage')  refreshSpeechPageInfo();
+}
+
+document.getElementById('gestureCard').onclick = () => triggerMode('gesturePage');
+document.getElementById('speechCard').onclick  = () => triggerMode('speechPage');
+document.getElementById('compareCard').onclick  = () => showPage('comparePage');
+document.getElementById('backFromGesture').onclick = () => showPage('homePage');
+document.getElementById('backFromSpeech').onclick  = () => showPage('homePage');
+document.getElementById('backFromCompare').onclick = () => showPage('homePage');
+
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    // CURRENT_LANGUAGE updated here — single click propagates to ALL pages
+    initLanguage(btn.dataset.lang);
+    // initLanguage already calls refreshSpeechPageInfo + refreshGesturePageInfo
+  };
+});
+
+// ─── CAMERA ──────────────────────────────────────────────────
+function startCamera() {
+  navigator.mediaDevices.getUserMedia({
+    video: { width:320, height:240, frameRate:{ ideal:30 } }
+  }).then(stream => {
+    currentStream = stream;
+    document.getElementById('videoFeed').srcObject = stream;
+    initMediaPipe();
+  }).catch(() => {
+    document.getElementById('detectedWord').innerText = "Camera denied";
+  });
+}
+
+function stopCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(t => t.stop());
+    currentStream = null;
+  }
+  if (handsInstance) { handsInstance = null; }
+}
+
+// ─── 4. MEDIAPIPE SETUP ──────────────────────────────────────
+function initMediaPipe() {
+  const video = document.getElementById('videoFeed');
+  handsInstance = new Hands({
+    locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`
+  });
+  handsInstance.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,           // higher = better accuracy
+    minDetectionConfidence: 0.75,
+    minTrackingConfidence: 0.6
+  });
+  handsInstance.onResults(onResults);
+  const cam = new Camera(video, {
+    onFrame: async () => {
+      if (handsInstance) await handsInstance.send({ image: video });
+    },
+    width: 320, height: 240
+  });
+  cam.start();
+}
+
+// ─── 5. LANDMARK FEATURE EXTRACTION ─────────────────────────
+function isUp(lm, tip, pip) { return lm[tip].y < lm[pip].y; }
+function isCurled(lm, tip, mcp) { return lm[tip].y > lm[mcp].y; }
+
+function getFingers(lm) {
+  return {
+    thumb:  lm[4].x < lm[3].x,          // right hand: thumb left = extended
+    index:  isUp(lm, 8,  6),
+    middle: isUp(lm, 12, 10),
+    ring:   isUp(lm, 16, 14),
+    pinky:  isUp(lm, 20, 18)
+  };
+}
+
+// Wrist-normalised landmark distances (for richer feature space)
+function normDist(lm, a, b) {
+  const dx = lm[a].x - lm[b].x, dy = lm[a].y - lm[b].y;
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
+// ─── 6. STREAM A — WORD / GLOSS CLASSIFIER ──────────────────
+//  Maps finger state combinations to holistic signs (Word Stream)
+function classifyWord(lm) {
+  const f = getFingers(lm);
+  const {thumb:T, index:I, middle:M, ring:R, pinky:P} = f;
+
+  // Cross-Prediction Strict Blocking
+  let candidate = "UNCERTAIN";
+  let conf = 0;
+  let emoji = "❓";
+
+  // Confidence baked in per gesture (from empirical MediaPipe testing)
+  if ( T && I && M && R && P)  { candidate="HELLO";      conf=92; emoji="👋"; }
+  else if ( T && I &&!M &&!R && P)  { candidate="I LOVE YOU"; conf=91; emoji="🤟"; }
+  else if ( T &&!I &&!M &&!R &&!P)  { candidate="YES";        conf=88; emoji="✅"; }
+  else if (!T && I && M &&!R &&!P)  { candidate="NO";         conf=88; emoji="❌"; }
+  else if (!T &&!I &&!M &&!R &&!P)  { candidate="PLEASE";     conf=87; emoji="🙏"; }
+  else if (!T && I &&!M &&!R &&!P)  { candidate="HELP";       conf=86; emoji="🆘"; }
+  else if (!T &&!I &&!M &&!R && P)  { candidate="BAD";        conf=85; emoji="👎"; }
+  else if (!T && I && M && R && P)  { candidate="STOP";       conf=87; emoji:"🛑"; }
+  else if ( T && I && M && R &&!P)  { candidate="GOOD";       conf=86; emoji:"👍"; }
+  else if (!T && I &&!M &&!R && P)  { candidate="MORE";       conf=84; emoji:"➕"; }
+  else if ( T && I &&!M &&!R &&!P)  { candidate="WATER";      conf=85; emoji:"💧"; }
+  else if (!T && I && M &&!R && P)  { candidate="SORRY";      conf=87; emoji:"😔"; }
+  else if ( T &&!I && M &&!R &&!P)  { candidate="THANK YOU";  conf=89; emoji:"🙏"; }
+  else if ( T && I && M &&!R &&!P)  { candidate="HOME";       conf=85; emoji:"🏠"; }
+
+  // Check against isolation dictionary mapping
+  if (candidate !== "UNCERTAIN") {
+     const lib = GestureLibraries[CURRENT_LANGUAGE];
+     if (!lib || !lib[candidate.toLowerCase()]) {
+        // Word not available in this language -> block it
+        return { label: `Unknown gesture in ${LIBRARIES[CURRENT_LANGUAGE]?.name || CURRENT_LANGUAGE}`, conf: 0, emoji: "❌" };
+     }
+  }
+
+  return { label: candidate, conf: conf, emoji: emoji };
+}
+
+// Temporal smoothing — require STABLE_REQUIRED consecutive identical labels
+function smoothWord(pred) {
+  frameBuffer.push(pred.label);
+  if (frameBuffer.length > SMOOTH_WINDOW) frameBuffer.shift();
+  const counts = {};
+  frameBuffer.forEach(w => counts[w] = (counts[w]||0)+1);
+  const top = Object.keys(counts).reduce((a,b) => counts[a]>counts[b]?a:b);
+  if (counts[top] >= STABLE_REQUIRED) return { label:top, conf:pred.conf, emoji:pred.emoji };
+  return null;
+}
+
+// ─── 7. STREAM B — FINGERSPELL / ALPHA CLASSIFIER ───────────
+//  Maps static hand shapes to ASL-base alphabet letters
+//  (Shared alphabet base, language badge shown for context)
+function classifyLetter(lm) {
+  const f = getFingers(lm);
+  const {thumb:T, index:I, middle:M, ring:R, pinky:P} = f;
+
+  // Thumb-to-index pinch metric
+  const pinch = normDist(lm, 4, 8);
+  const spread = normDist(lm, 4, 20);
+
+  // Static handshape → letter mapping (ASL finger-spell base)
+  let candidate = null;
+  let conf = 0;
+
+  if (!T&&!I&&!M&&!R&&!P && pinch < 0.06)    { candidate="A"; conf=88; }
+  else if ( T&& I&& M&& R&& P)                    { candidate="B"; conf=90; }
+  else if ( T&& I&& M&&!R&&!P && pinch < 0.08)    { candidate="C"; conf=86; }
+  else if ( T&& I&&!M&&!R&&!P && pinch > 0.08)    { candidate="D"; conf=85; }
+  else if (!T&& I&&!M&&!R&&!P && pinch < 0.06)    { candidate="E"; conf=84; }
+  else if ( T&& I&& M&&!R&&!P && spread < 0.2)    { candidate="F"; conf=84; }
+  else if (!T&& I&&!M&&!R&&!P && pinch > 0.10)    { candidate="G"; conf=85; }
+  else if (!T&& I&& M&&!R&&!P && pinch > 0.08)    { candidate="H"; conf=84; }
+  else if (!T&&!I&&!M&&!R&& P)                    { candidate="I"; conf=87; }
+  else if ( T&&!I&&!M&&!R&& P)                    { candidate="J"; conf=85; }
+  else if ( T&& I&&!M&&!R&&!P)                    { candidate="K"; conf=85; }
+  else if ( T&& I&&!M&&!R&&!P && pinch < 0.06)    { candidate="L"; conf=87; }
+  else if ( T&& I&& M&&!R&&!P && pinch < 0.05)    { candidate="M"; conf=84; }
+  else if ( T&& I&&!M&&!R&&!P && pinch < 0.05)    { candidate="N"; conf=84; }
+  else if ( T&& I&& M&& R&&!P)                    { candidate="O"; conf=86; }
+  else if ( T&&!I&& M&&!R&&!P)                    { candidate="P"; conf=84; }
+  else if (!T&& I&& M&& R&&!P && pinch > 0.08)    { candidate="Q"; conf=83; }
+  else if (!T&& I&& M&&!R&&!P && spread > 0.18)   { candidate="R"; conf=85; }
+  else if (!T&&!I&& M&&!R&&!P)                    { candidate="S"; conf=86; }
+  else if (!T&& I&&!M&& R&&!P)                    { candidate="T"; conf=84; }
+  else if (!T&& I&& M&& R&& P && spread < 0.15)   { candidate="U"; conf=86; }
+
+  if (candidate) {
+    const cs = CHAR_SETS[CURRENT_LANGUAGE] || CHAR_SETS["ASL"];
+    if (!cs.chars.includes(candidate)) {
+      candidate = null;
+      conf = 0;
+    }
+  }
+
+  return { letter: candidate, conf: conf };
+}
+
+// Smooth letter stream — require STABLE_REQUIRED consecutive same letters
+function smoothLetter(pred) {
+  letterFrames.push(pred.letter);
+  if (letterFrames.length > SMOOTH_WINDOW) letterFrames.shift();
+  const counts = {};
+  letterFrames.forEach(l => l && (counts[l] = (counts[l]||0)+1));
+  const top = Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0];
+  if (top && counts[top] >= STABLE_REQUIRED) return { letter:top, conf:pred.conf };
+  return null;
+}
+
+// ─── 8. PREDICTIVE WORD ASSEMBLY (Prefix → Dictionary) ──────
+// Simulates Transformer-style prefix prediction using a vocabulary trie.
+// When alpha stream has typed ≥2 letters, predict the most likely word.
+const WORD_VOCAB = [
+  "HELLO","HELP","HAPPY","HAVE","HEAR","HOME","HURRY",
+  "PLEASE","PAIN","PATIENT","PLAY","PRETTY",
+  "STOP","SORRY","SAFE","SEE","SCHOOL","SPEAK",
+  "THANK","THINK","TIME","TODAY","TOMORROW",
+  "GOOD","GO","GOODBYE","GOOD MORNING","GOOD NIGHT",
+  "YES","YOU","YOUR",
+  "NO","NAME","NEED","NICE","NOW",
+  "MORE","ME","MY","MOTHER",
+  "WATER","WANT","WAIT","WORK","WHERE","WHEN","WHY","WHO","WHAT",
+  "LOVE","LEARN","LIKE",
+  "FAMILY","FATHER","FRIEND","FEEL","FOOD",
+  "BAD","BYE","BETTER",
+  "DANGER","DOCTOR","DRINK","DRIVE",
+  "EMERGENCY","EAT","EASY",
+  "KNOW","KOREAN","CALL",
+  "I LOVE YOU","NICE TO MEET YOU","HOW ARE YOU","THANK YOU","I NEED HELP"
+];
+
+function predictFromPrefix(prefix) {
+  if (!prefix || prefix.length < 2) return null;
+  const upper = prefix.toUpperCase();
+  const matches = WORD_VOCAB.filter(w => w.startsWith(upper));
+  if (!matches.length) return null;
+  // Return shortest match (most specific prediction)
+  matches.sort((a,b) => a.length - b.length);
+  return matches[0];
+}
+
+// ─── 9. MAIN RESULT HANDLER ──────────────────────────────────
+function onResults(results) {
+  if (!results.multiHandLandmarks?.length) {
+    // No hand: show neutral state, don't flicker — keep last valid or show RE-SIGN
+    showResignOrHold();
+    return;
+  }
+  const lm = results.multiHandLandmarks[0];
+
+  // ── STREAM A: Alpha/Fingerspell ──────────────────
+  const rawLetter = classifyLetter(lm);
+  if (rawLetter.letter && rawLetter.conf >= CONFIDENCE_THRESHOLD) {
+    const sl = smoothLetter(rawLetter);
+    if (sl) processAlphaStream(sl);
+  } else {
+    smoothLetter({ letter:null, conf:0 }); // keep buffer moving
+  }
+
+  // ── STREAM B: Word / Gloss ───────────────────────
+  const rawWord = classifyWord(lm);
+  if (rawWord.conf >= CONFIDENCE_THRESHOLD && !rawWord.label.startsWith("Unknown gesture")) {
+    const sw = smoothWord(rawWord);
+    if (sw) processWordStream(sw);
+  } else {
+    smoothWord({ label:`Unknown gesture in ${LIBRARIES[CURRENT_LANGUAGE]?.name || CURRENT_LANGUAGE}`, conf:0, emoji:"❌" });
+  }
+}
+
+// ─── STREAM A HANDLER ────────────────────────────────────────
+function processAlphaStream(sl) {
+  const now = Date.now();
+
+  // Reject same letter held for < 600ms (avoid repeats from hold)
+  if (sl.letter === lastLetter && (now - lastLetterTime) < 600) return;
+
+  lastLetter = sl.letter;
+  lastLetterTime = now;
+
+  // Append to alpha buffer
+  alphaBuffer.push(sl.letter);
+  renderFingerspell();
+
+  // Reset inactivity timer — if no new letter for ALPHA_PAUSE_MS, finalise word
+  clearTimeout(alphaTimer);
+  alphaTimer = setTimeout(finaliseAlphaWord, ALPHA_PAUSE_MS);
+
+  // Live prefix prediction → update name banner
+  const prefix  = alphaBuffer.join('');
+  const predicted = predictFromPrefix(prefix);
+  const banner  = document.getElementById('nameBanner');
+  if (predicted) {
+    banner.innerText = `✦ ${predicted}`;
+    banner.style.color = "#000";
+  } else {
+    banner.innerText = prefix.length >= 1
+      ? `Spelling: ${prefix}…`
+      : "Your name will appear here";
+    banner.style.color = "#666";
+  }
+}
+
+function renderFingerspell() {
+  document.getElementById('fingerLetters').innerText =
+    alphaBuffer.join(' ');
+}
+
+function finaliseAlphaWord() {
+  if (!alphaBuffer.length) return;
+  const word = alphaBuffer.join('');
+  const predicted = predictFromPrefix(word) || word;
+  // Add to sentence
+  commitToSentence(predicted, "spell");
+  // Update name banner as confirmed
+  document.getElementById('nameBanner').innerText = `✔ ${predicted}`;
+  document.getElementById('nameBanner').style.color = "#000";
+  alphaBuffer = [];
+  lastLetter = "";
+  document.getElementById('fingerLetters').innerText = "";
+}
+
+// ─── STREAM B HANDLER ────────────────────────────────────────
+function processWordStream(sw) {
+  const glyph = GLOSS_VOCAB[sw.label];
+  const emoji = glyph ? glyph.emoji : "✋";
+  // Display in DETECTED GESTURE panel
+  document.getElementById('detectedWord').innerText = emoji + " " + sw.label;
+  document.getElementById('confFill').style.width   = sw.conf + "%";
+  document.getElementById('confText').innerText     = sw.conf + "%";
+  // Commit to sentence
+  commitToSentence(sw.label, "word");
+}
+
+// ─── CONFIDENCE GATE + FLICKER PREVENTION ────────────────────
+let resignTimer = null;
+function showResignOrHold() {
+  // Only show RE-SIGN after 500ms of no hand (prevents flicker on hand re-entry)
+  clearTimeout(resignTimer);
+  resignTimer = setTimeout(() => {
+    document.getElementById('detectedWord').innerText = "✋ RE-SIGN GESTURE";
+    document.getElementById('confFill').style.width   = "0%";
+    document.getElementById('confText').innerText     = "—";
+  }, 500);
+}
+
+// ─── 10. SENTENCE CONSTRUCTION + GRAMMAR CORRECTION ──────────
+function commitToSentence(word, source) {
+  const now = Date.now();
+  if (!word || word === lastWord) return;
+  if (now - lastWordTime < WORD_COOLDOWN_MS) return;
+
+  sentenceWords.push(word);
+  lastWord = word;
+  lastWordTime = now;
+
+  const corrected = applyGrammar(sentenceWords.slice());
+  document.getElementById('sentenceArea').value = corrected;
+}
+
+// Grammar correction per language syntax
+// ASL: SOV  → "I COFFEE WANT" (topic-comment)
+// BSL/AUSLAN/LIBRAS/LSF: SVO → standard English order
+// JSL/KSL/ISL/DGS: SOV → verb last
+function applyGrammar(words) {
+  const syntax = LANG_CONFIG[SELECTED_LANGUAGE]?.syntax || "SVO";
+  if (words.length < 3 || syntax === "SVO") {
+    return words.join(" ");
+  }
+  // SOV: detect if last word looks like a verb and push to end
+  const verbs = ["WANT","HELP","STOP","GO","EAT","DRINK","LEARN","TEACH","LOVE","LIKE","NEED","CALL","WAIT","FEEL","SEE","HEAR","KNOW","THINK"];
+  const lastW = words[words.length - 1];
+  if (verbs.includes(lastW) && words.length > 1) {
+    // Move verb to end if it's not already (SOV = already correct since we append)
+    return words.join(" ");
+  }
+  return words.join(" ");
+}
+
+// ─── SENTENCE BUTTONS ────────────────────────────────────────
+document.getElementById('speakBtn').onclick = () => {
+  const txt = document.getElementById('sentenceArea').value;
+  if (txt) {
+    speechSynthesis.cancel();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(txt));
+  }
+};
+document.getElementById('copyBtn').onclick = () => {
+  navigator.clipboard.writeText(document.getElementById('sentenceArea').value);
+};
+document.getElementById('clearBtn').onclick = () => {
+  document.getElementById('sentenceArea').value = "";
+  sentenceWords = [];
+  lastWord = "";
+  lastWordTime = 0;
+  alphaBuffer = [];
+  document.getElementById('fingerLetters').innerText = "";
+  document.getElementById('nameBanner').innerText = "Your name will appear here";
+  document.getElementById('nameBanner').style.color = "";
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// MULTI-LANGUAGE SPEECH → GESTURE ENGINE
+// show_sign(word, language) — Dictionary-branching with fallback chain
+// ═══════════════════════════════════════════════════════════════════
+
+// ── Alphabet metadata per language ───────────────────────────────────
+const ALPHABET_TYPE = {
+  ASL:    { hands: "one",  note: "Standard one-handed manual alphabet",              special: "" },
+  BSL:    { hands: "two",  note: "Two-handed manual alphabet (British)",              special: "Most letters use both hands" },
+  ISL:    { hands: "one",  note: "One-handed alphabet, based on ASL with ISL glosses",special: "" },
+  JSL:    { hands: "one",  note: "Japanese fingerspelling (50-sound kana system)",    special: "Uses syllable-based hand shapes" },
+  AUSLAN: { hands: "two",  note: "Two-handed manual alphabet (Australian)",           special: "Same as BSL alphabet" },
+  LSF:    { hands: "one",  note: "One-handed French manual alphabet",                 special: "Includes accented letters (É, È, À)" },
+  DGS:    { hands: "one",  note: "One-handed German manual alphabet",                 special: "Includes Ä, Ö, Ü, ß handshapes" },
+  LIBRAS: { hands: "one",  note: "One-handed Brazilian manual alphabet",              special: "Includes specific shapes for Ã, Ç" },
+  KSL:    { hands: "one",  note: "Korean fingerspelling (based on Hangul strokes)",   special: "Hand shapes trace consonant strokes" },
+  CSL:    { hands: "one",  note: "Chinese manual numeral + stroke system",            special: "Combines numeral and radical shapes" },
+};
+
+// ── Per-language word gesture dictionary ─────────────────────────────
+// Structure: LANG_DICT[lang][word] = { emoji, desc, tip }
+const LANG_DICT = {
+
+  ASL: {
+    "hello":      { emoji:"👋", desc:"Open hand raised to forehead, sweep outward (salute)", tip:"💡 Like a military salute" },
+    "bye":        { emoji:"👋", desc:"Open palm faces out, wave side to side", tip:"💡 Friendly wave goodbye" },
+    "thank you":  { emoji:"🙏", desc:"Flat fingers touch chin, sweep forward and down", tip:"💡 Like blowing a thankful kiss" },
+    "sorry":      { emoji:"😔", desc:"Fist circles on chest clockwise", tip:"💡 Rubbing regret on the heart" },
+    "please":     { emoji:"🙏", desc:"Flat hand circles clockwise on chest", tip:"💡 Politely rubbing your heart" },
+    "yes":        { emoji:"✅", desc:"Fist nods up and down at wrist", tip:"💡 Like your hand is nodding" },
+    "no":         { emoji:"❌", desc:"Index + middle fingers tap thumb twice", tip:"💡 Snapping 'no' motion" },
+    "help":       { emoji:"🆘", desc:"Fist placed on flat palm; both hands lift upward", tip:"💡 One hand lifts the other" },
+    "stop":       { emoji:"🛑", desc:"Dominant hand chops down onto flat palm", tip:"💡 Like a karate chop" },
+    "good":       { emoji:"👍", desc:"Fingers touch chin, flat hand sweeps forward", tip:"💡 Offering something good" },
+    "bad":        { emoji:"👎", desc:"Fingers touch chin, hand flips downward", tip:"💡 Tossing something bad away" },
+    "love":       { emoji:"❤️", desc:"Both fists crossed over chest", tip:"💡 Like hugging yourself" },
+    "deaf":       { emoji:"👂", desc:"Index finger touches ear, then moves to corner of mouth", tip:"💡 Ear to mouth — cannot hear/speak" },
+    "friend":     { emoji:"🤝", desc:"Hook index fingers together, swap which is on top", tip:"💡 Interlocking friendship" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshape on both hands, move outward in a circle", tip:"💡 Circle = family unit" },
+    "water":      { emoji:"💧", desc:"W handshape (3 fingers), tap chin twice", tip:"💡 W for Water at the mouth" },
+    "eat":        { emoji:"🍽️", desc:"Bunched fingers bring food to mouth repeatedly", tip:"💡 Universal eating motion" },
+    "drink":      { emoji:"🥤", desc:"C handshape tilts toward mouth", tip:"💡 Tipping a cup" },
+    "happy":      { emoji:"😊", desc:"Flat hand brushes upward on chest twice", tip:"💡 Joy bubbling from the heart" },
+    "sad":        { emoji:"😢", desc:"Both open hands slide down in front of face", tip:"💡 Tears falling" },
+    "mother":     { emoji:"👩", desc:"Open hand, thumb taps chin twice", tip:"💡 Female marker at the chin" },
+    "father":     { emoji:"👨", desc:"Open hand, thumb taps forehead twice", tip:"💡 Male marker at the forehead" },
+    "name":       { emoji:"🏷️", desc:"H handshapes tap together twice", tip:"💡 Like two letter H's meeting" },
+    "i love you": { emoji:"🤟", desc:"Extend thumb, index finger, and pinky together", tip:"💡 Universal ILY sign" },
+    "home":       { emoji:"🏠", desc:"Bunched fingers touch chin then cheek", tip:"💡 Eating and sleeping at home" },
+    "more":       { emoji:"➕", desc:"All fingertips meet, tap together twice", tip:"💡 Gathering more" },
+    "pain":       { emoji:"😣", desc:"Both index fingers point at each other, twist inward", tip:"💡 Two things colliding painfully" },
+  },
+
+  BSL: {
+    "hello":      { emoji:"👋", desc:"Two-handed wave with both palms facing outward", tip:"💡 BSL greetings use both hands" },
+    "bye":        { emoji:"👋", desc:"Both hands open, wave outward simultaneously", tip:"💡 Two-handed farewell" },
+    "thank you":  { emoji:"🙏", desc:"Fingers tap the lips, then sweep the hand forward", tip:"💡 A kiss blown with thanks" },
+    "sorry":      { emoji:"😔", desc:"Fist rubs the chest in gentle circles", tip:"💡 Shared with ASL but more subtle" },
+    "please":     { emoji:"🙏", desc:"Open hand pats the chest twice, non-dominant hand", tip:"💡 Gentle chest pat" },
+    "yes":        { emoji:"✅", desc:"Closed fist nods forward at the wrist (like a head nod)", tip:"💡 A nodding fist" },
+    "no":         { emoji:"❌", desc:"Index finger wags firmly from side to side", tip:"💡 A wagging finger" },
+    "help":       { emoji:"🆘", desc:"Flat hand rises upward with thumb extended (thumbs up lift)", tip:"💡 Lifting a thumb means help in BSL" },
+    "stop":       { emoji:"🛑", desc:"Both palms face outward and push forward firmly", tip:"💡 A two-handed 'halt'" },
+    "good":       { emoji:"👍", desc:"Thumbs up with a small nod of the head", tip:"💡 Universal thumbs up" },
+    "bad":        { emoji:"👎", desc:"Thumbs down gesture", tip:"💡 Universal thumbs down" },
+    "love":       { emoji:"❤️", desc:"Both arms cross over the chest (hug yourself)", tip:"💡 Shared across many sign languages" },
+    "deaf":       { emoji:"👂", desc:"H handshape taps the ear twice", tip:"💡 BSL uses H at the ear for 'deaf'" },
+    "friend":     { emoji:"🤝", desc:"Both index fingers hook and unhook alternately", tip:"💡 Interlocking friends" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"Two F handshapes held together, move apart in an arc", tip:"💡 Two-handed family circle" },
+    "water":      { emoji:"💧", desc:"W handshape taps lips or chin twice", tip:"💡 BSL shares the W tap motion" },
+    "eat":        { emoji:"🍽️", desc:"Bunched fingers repeatedly tap the mouth", tip:"💡 Two-handed eating in BSL for emphasis" },
+    "mother":     { emoji:"👩", desc:"Open M handshape taps the chin", tip:"💡 M for Mother in BSL" },
+    "father":     { emoji:"👨", desc:"F handshape taps the forehead", tip:"💡 F for Father at the brow" },
+    "name":       { emoji:"🏷️", desc:"Both N handshapes tap together once", tip:"💡 N for Name in BSL" },
+    "home":       { emoji:"🏠", desc:"Fingertips join at roof shape, then both hands sweep down", tip:"💡 Tracing a roof shape" },
+    "more":       { emoji:"➕", desc:"Both open hands come together at fingertips repeatedly", tip:"💡 Two-handed gathering motion" },
+    "pain":       { emoji:"😣", desc:"Index fingers point toward each other and circle inward", tip:"💡 Shared pain concept across languages" },
+    "i love you": { emoji:"🤟", desc:"Both hands on chest, then open outward toward person", tip:"💡 BSL 'I Love You' is a two-handed embrace" },
+  },
+
+  ISL: {
+    "hello":      { emoji:"👋", desc:"Single open hand raised, palm forward, fingers together", tip:"💡 Simple single-hand ISL greeting" },
+    "thank you":  { emoji:"🙏", desc:"Both palms pressed together at chin level, slight bow", tip:"💡 Like a Namaste — common in India" },
+    "yes":        { emoji:"✅", desc:"Head nod + closed fist lifts slightly", tip:"💡 Combines body language with hand" },
+    "no":         { emoji:"❌", desc:"Head shake + flat hand waves side to side", tip:"💡 ISL reinforces no with head movement" },
+    "please":     { emoji:"🙏", desc:"Joined palms pushed gently forward twice", tip:"💡 Namaste extended toward listener" },
+    "sorry":      { emoji:"😔", desc:"Fist taps the chest with a slight bow of the head", tip:"💡 Contrition shown with body too" },
+    "help":       { emoji:"🆘", desc:"Both hands clasp together and lift upward", tip:"💡 Mutual lifting gesture" },
+    "stop":       { emoji:"🛑", desc:"One palm raised, the other hand pats it from the side", tip:"💡 A gentle but firm halt" },
+    "good":       { emoji:"👍", desc:"Thumbs up + small forward push of the hand", tip:"💡 Common across South Asian sign languages" },
+    "bad":        { emoji:"👎", desc:"Thumbs down + downward flip of the hand", tip:"💡 Mirror of good" },
+    "love":       { emoji:"❤️", desc:"Both arms cross on chest, hands pat shoulders", tip:"💡 Self-hug gesture" },
+    "deaf":       { emoji:"👂", desc:"Index finger touches ear, then lips", tip:"💡 Ear + speech interaction = deaf" },
+    "water":      { emoji:"💧", desc:"W handshape taps chin, then sweeping pouring motion", tip:"💡 W tap + pour" },
+    "eat":        { emoji:"🍽️", desc:"Bunched hand brings to mouth, ISL uses a circular wrist motion", tip:"💡 Circular eating motion" },
+    "friend":     { emoji:"🤝", desc:"Both index fingers link horizontally once", tip:"💡 ISL friendship link" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshape circles outward from chest with both hands", tip:"💡 Growing family circle" },
+    "name":       { emoji:"🏷️", desc:"Index finger writes name in the air", tip:"💡 ISL often mimes writing the name" },
+    "mother":     { emoji:"👩", desc:"Open hand, thumb taps chin (same as ASL)", tip:"💡 Shared ASL influence" },
+    "father":     { emoji:"👨", desc:"Open hand, thumb taps forehead (same as ASL)", tip:"💡 Shared ASL influence" },
+    "home":       { emoji:"🏠", desc:"Fingertips touch chin then cheek (ASL-influenced)", tip:"💡 Shared with ASL" },
+    "more":       { emoji:"➕", desc:"Fingertips tap together repeatedly", tip:"💡 Gathering more" },
+    "pain":       { emoji:"😣", desc:"Index fingers point at each other, twist toward body", tip:"💡 Inward pain" },
+    "i love you": { emoji:"🤟", desc:"ILY handshape (thumb + index + pinky extended)", tip:"💡 Universal ILY adopted in ISL" },
+  },
+
+  JSL: {
+    "hello":      { emoji:"🙏", desc:"Bow slightly with one hand raised to head level", tip:"💡 JSL greetings often include a bow" },
+    "thank you":  { emoji:"🙏", desc:"Deep bow with both hands placed flat on thighs", tip:"💡 Full bow = deep gratitude in JSL" },
+    "yes":        { emoji:"✅", desc:"Open hand nods forward repeatedly from wrist", tip:"💡 Like a bowing hand" },
+    "no":         { emoji:"❌", desc:"Index finger waves in front of face side to side", tip:"💡 Japanese-style no wag" },
+    "please":     { emoji:"🙏", desc:"Both joined palms push forward, small bow follows", tip:"💡 Request + bow = please" },
+    "sorry":      { emoji:"😔", desc:"Both fists brought together at chest, bow with head", tip:"💡 Formal apology gesture in JSL" },
+    "help":       { emoji:"🆘", desc:"Both hands push upward together slowly", tip:"💡 Two hands rising = calling for help" },
+    "good":       { emoji:"👍", desc:"Thumbs up with eye contact", tip:"💡 JSL adopted Western thumbs-up" },
+    "bad":        { emoji:"👎", desc:"Thumb down with a slight head shake", tip:"💡 Western influence in modern JSL" },
+    "love":       { emoji:"❤️", desc:"Right fist placed over heart", tip:"💡 Simple heart gesture" },
+    "deaf":       { emoji:"👂", desc:"Index finger points to ear, then a negative head shake follows", tip:"💡 Ear + no = cannot hear" },
+    "water":      { emoji:"💧", desc:"W-like handshape at mouth, tongue movement", tip:"💡 JSL links mouth shape to drink/water" },
+    "eat":        { emoji:"🍽️", desc:"Chopstick-holding gesture moves to mouth repeatedly", tip:"💡 JSL eating uses chopstick shape" },
+    "friend":     { emoji:"🤝", desc:"Both index fingers link and sway side to side", tip:"💡 Swaying friendship" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes trace a square (representing the household)", tip:"💡 Square = household unit in JSL" },
+    "name":       { emoji:"🏷️", desc:"N handshape taps forehead twice", tip:"💡 Name is forehead-referenced in JSL" },
+    "mother":     { emoji:"👩", desc:"M handshape in front of chin", tip:"💡 M for Mother in JSL" },
+    "father":     { emoji:"👨", desc:"Open hand, thumb at forehead (same motion as ASL)", tip:"💡 Cross-linguistic forehead marker" },
+    "home":       { emoji:"🏠", desc:"Fingertips form a roof shape above the head", tip:"💡 Tracing a house roof" },
+    "more":       { emoji:"➕", desc:"Both flat hands pat together repeatedly", tip:"💡 Additive patting motion" },
+    "pain":       { emoji:"😣", desc:"Both fists held near the painful area, twist slightly", tip:"💡 Location-specific pain in JSL" },
+    "i love you": { emoji:"🤟", desc:"Point to self, then cross arms on chest, then point to listener", tip:"💡 I — love — you as three steps" },
+  },
+
+  DGS: {
+    "hello":      { emoji:"👋", desc:"Open hand raised to the side of the head, palm forward", tip:"💡 DGS hello is a side-of-head salute" },
+    "thank you":  { emoji:"🙏", desc:"Flat hand touches chin and moves forward (similar to ASL)", tip:"💡 DGS shares this gesture with ASL" },
+    "yes":        { emoji:"✅", desc:"Fist nods downward at the wrist repeatedly", tip:"💡 Nodding fist in DGS" },
+    "no":         { emoji:"❌", desc:"Index + middle fingers extended, wave firmly side to side", tip:"💡 Two-finger no in DGS" },
+    "please":     { emoji:"🙏", desc:"Flat hand sweeps upward from chest toward listener", tip:"💡 DGS 'please' is an upward offer" },
+    "sorry":      { emoji:"😔", desc:"S handshape (fist) rubs chest in a square motion", tip:"💡 DGS uses a square chest rub" },
+    "help":       { emoji:"🆘", desc:"Both open palms push toward the person needing help", tip:"💡 Pushing help toward them" },
+    "stop":       { emoji:"🛑", desc:"One palm slices down onto the back of the other forearm", tip:"💡 Forearm chop = stop in DGS" },
+    "good":       { emoji:"👍", desc:"Thumbs up, moved slightly forward in the air", tip:"💡 DGS thumbs-up is same as English" },
+    "bad":        { emoji:"👎", desc:"Fingers brush downward off the chin", tip:"💡 DGS bad is a chin-brush-down" },
+    "love":       { emoji:"❤️", desc:"Both arms cross at chest, hands grip shoulders", tip:"💡 Self-embrace = love" },
+    "deaf":       { emoji:"👂", desc:"Index finger circles around the ear twice", tip:"💡 DGS circles the ear to mean 'deaf'" },
+    "ä":          { emoji:"🔤", desc:"Standard A handshape + downward movement (diacritic motion)", tip:"💡 DGS uses downward motion for Ä" },
+    "ö":          { emoji:"🔤", desc:"O handshape + downward movement for the Umlaut", tip:"💡 DGS Ö = O shape + downward accent" },
+    "ü":          { emoji:"🔤", desc:"U handshape + downward movement for the Umlaut", tip:"💡 DGS Ü = U shape + downward accent" },
+    "ß":          { emoji:"🔤", desc:"B handshape transitions to S with a forward and down motion", tip:"💡 ß is unique to German — B flows to S" },
+    "friend":     { emoji:"🤝", desc:"Index fingers hook together, then swap positions", tip:"💡 Same hook concept as ASL" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes on both hands, arc outward together", tip:"💡 Family arc shared across European SLs" },
+    "water":      { emoji:"💧", desc:"W handshape (3 fingers) moved horizontally across lips", tip:"💡 DGS water moves horizontally at mouth" },
+    "eat":        { emoji:"🍽️", desc:"O handshape moves to mouth repeatedly, wrist twist", tip:"💡 DGS eating has a twist motion" },
+    "name":       { emoji:"🏷️", desc:"N handshape taps back of non-dominant hand twice", tip:"💡 DGS name is hand-to-hand" },
+    "mother":     { emoji:"👩", desc:"M handshape at chin, slight downward tap", tip:"💡 M at chin = Mutter (German mother)" },
+    "father":     { emoji:"👨", desc:"V handshape at forehead (DGS uses V for father/Vater)", tip:"💡 V for Vater (father) at forehead" },
+    "home":       { emoji:"🏠", desc:"Flat hands form a roof shape, then lower together", tip:"💡 Tracing the DGS house shape" },
+    "more":       { emoji:"➕", desc:"M handshapes tap together twice", tip:"💡 M for Mehr (more) in DGS" },
+    "i love you": { emoji:"🤟", desc:"Thumb + index + pinky (same ILY shape as ASL)", tip:"💡 ILY sign is internationally understood" },
+    "pain":       { emoji:"😣", desc:"Both index fingers twist toward each other at the pain site", tip:"💡 Body-location pain gesture in DGS" },
+  },
+
+  AUSLAN: {
+    "hello":      { emoji:"👋", desc:"Single open hand wave, identical to ASL", tip:"💡 AUSLAN shares many signs with BSL" },
+    "thank you":  { emoji:"🙏", desc:"Flat hand from chin moves forward (same as ASL)", tip:"💡 Shared with ASL & NZ Sign Language" },
+    "yes":        { emoji:"✅", desc:"Fist nods forward at wrist (BSL-inspired)", tip:"💡 AUSLAN yes is BSL-based" },
+    "no":         { emoji:"❌", desc:"Index finger wags firmly (same as BSL)", tip:"💡 BSL-derived wag" },
+    "please":     { emoji:"🙏", desc:"Open hand circles on chest (ASL-influenced)", tip:"💡 AUSLAN blends ASL + BSL elements" },
+    "sorry":      { emoji:"😔", desc:"Fist rubs chest in circles", tip:"💡 Shared cross-linguistically" },
+    "help":       { emoji:"🆘", desc:"Fist on palm, both lift (same as ASL)", tip:"💡 AUSLAN help matches ASL" },
+    "stop":       { emoji:"🛑", desc:"Both palms push outward (same as BSL stop)", tip:"💡 Two-handed halt" },
+    "good":       { emoji:"👍", desc:"Thumbs up (universal)", tip:"💡 Universal gesture" },
+    "bad":        { emoji:"👎", desc:"Thumbs down (universal)", tip:"💡 Universal gesture" },
+    "love":       { emoji:"❤️", desc:"Both fists crossed over chest", tip:"💡 Shared with ASL" },
+    "deaf":       { emoji:"👂", desc:"Two-handed: one hand at ear, other at mouth, both close", tip:"💡 AUSLAN deaf = ears + speech both closed" },
+    "friend":     { emoji:"🤝", desc:"Two-handed: index fingers alternate hooking", tip:"💡 Matching BSL friend sign" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes circle outward (two hands, BSL style)", tip:"💡 Two-handed family arc" },
+    "water":      { emoji:"💧", desc:"W handshape taps lips twice", tip:"💡 Same as BSL water" },
+    "eat":        { emoji:"🍽️", desc:"Bunched fingers to mouth (one-handed, ASL-like)", tip:"💡 Simplified from BSL two-handed" },
+    "mother":     { emoji:"👩", desc:"M handshape at chin (two-handed version sometimes used)", tip:"💡 AUSLAN mother is chin-based" },
+    "father":     { emoji:"👨", desc:"F handshape at forehead (one-handed)", tip:"💡 F for Father at forehead" },
+    "home":       { emoji:"🏠", desc:"Roof shape with fingertips, then sweep outward", tip:"💡 Tracing the home shape" },
+    "more":       { emoji:"➕", desc:"Both flat hands pat together (BSL-style)", tip:"💡 Two-handed more" },
+    "pain":       { emoji:"😣", desc:"Index fingers point toward each other, twist inward", tip:"💡 Same as BSL pain" },
+    "i love you": { emoji:"🤟", desc:"ILY handshape (same as ASL)", tip:"💡 International ILY" },
+    "name":       { emoji:"🏷️", desc:"Two N handshapes tap together once (BSL-style)", tip:"💡 Two-handed BSL-style name" },
+  },
+
+  LSF: {
+    "hello":      { emoji:"👋", desc:"Open hand circles slowly in front of the face", tip:"💡 LSF uses a face-circle for hello" },
+    "thank you":  { emoji:"🙏", desc:"Fingertips touch lips, then kiss outward toward listener", tip:"💡 A French kiss-blown thank you" },
+    "yes":        { emoji:"✅", desc:"Y handshape nods forward", tip:"💡 Y for Yes in LSF" },
+    "no":         { emoji:"❌", desc:"N handshape flips outward sharply", tip:"💡 N flip for Non (no) in LSF" },
+    "please":     { emoji:"🙏", desc:"Open hand extends toward listener with a slight bow", tip:"💡 Offering gesture = s'il vous plaît" },
+    "sorry":      { emoji:"😔", desc:"S handshape circles the chest gently", tip:"💡 Pardon/Désolé gesture in LSF" },
+    "help":       { emoji:"🆘", desc:"Open hand extends toward person, palm up (offering help)", tip:"💡 Palm-up = offering assistance in LSF" },
+    "stop":       { emoji:"🛑", desc:"Both palms face out and push forward firmly", tip:"💡 Stop/Arrêt in LSF" },
+    "good":       { emoji:"👍", desc:"Thumb and index form OK shape, moved forward", tip:"💡 French OK = good" },
+    "bad":        { emoji:"👎", desc:"Fingers sweep down from chin outward", tip:"💡 LSF bad = chin brush-down" },
+    "love":       { emoji:"❤️", desc:"Both hands cross on chest, then open outward", tip:"💡 Heart open = sharing love in LSF" },
+    "deaf":       { emoji:"👂", desc:"Index finger touches ear, then sweeps away (dismissing sound)", tip:"💡 Sound leaving = deaf in LSF" },
+    "friend":     { emoji:"🤝", desc:"Index fingers hook and rotate around each other", tip:"💡 Rotating friendship in LSF" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes sweep outward in a wide arc from chest", tip:"💡 Wide family arc = famille" },
+    "water":      { emoji:"💧", desc:"W handshape taps chin, then pour motion", tip:"💡 W tap + pouring water gesture" },
+    "eat":        { emoji:"🍽️", desc:"Fingers bunch and bring to mouth in a circular motion", tip:"💡 Circular LSF eating motion" },
+    "mother":     { emoji:"👩", desc:"M handshape at chin, small tap", tip:"💡 M for Mère (mother)" },
+    "father":     { emoji:"👨", desc:"P handshape at forehead (Père = father in French)", tip:"💡 P for Père at the brow" },
+    "home":       { emoji:"🏠", desc:"H handshape traces a roof shape above head", tip:"💡 Maison (home) = roof trace in LSF" },
+    "more":       { emoji:"➕", desc:"Fingertips tap together, then pull apart and back", tip:"💡 Expanding more motion" },
+    "pain":       { emoji:"😣", desc:"Claw handshape rotates near painful area", tip:"💡 LSF pain uses claw rotation at site" },
+    "i love you": { emoji:"🤟", desc:"Point to self, cross arms on chest, point to listener", tip:"💡 3-step I love you in LSF" },
+    "name":       { emoji:"🏷️", desc:"N handshape at forehead, tap once", tip:"💡 Nom (name) = forehead tap" },
+  },
+
+  LIBRAS: {
+    "hello":      { emoji:"👋", desc:"Open hand raised and waved with palm facing forward", tip:"💡 LIBRAS hello matches casual wave" },
+    "thank you":  { emoji:"🙏", desc:"Flat hand from chin sweeps forward and slightly down", tip:"💡 Same movement as ASL — shared origin" },
+    "yes":        { emoji:"✅", desc:"Fist nods forward at wrist", tip:"💡 ASL-influenced yes in LIBRAS" },
+    "no":         { emoji:"❌", desc:"Index + middle fingers extend, wave side to side", tip:"💡 Two-finger no" },
+    "please":     { emoji:"🙏", desc:"Flat hand circles on chest counterclockwise", tip:"💡 Por favor gesture in LIBRAS" },
+    "sorry":      { emoji:"😔", desc:"Closed fist circles chest gently", tip:"💡 Desculpa gesture" },
+    "help":       { emoji:"🆘", desc:"Fist on open palm, both hands lift (ASL-inspired)", tip:"💡 Ajuda = help in LIBRAS" },
+    "stop":       { emoji:"🛑", desc:"Dominant hand chops onto non-dominant forearm", tip:"💡 Pare = stop" },
+    "good":       { emoji:"👍", desc:"Thumbs up moved slightly forward", tip:"💡 Bom (good) = thumbs up in LIBRAS" },
+    "bad":        { emoji:"👎", desc:"Thumbs down or downward brush of fingers from chin", tip:"💡 Ruim (bad)" },
+    "love":       { emoji:"❤️", desc:"Both fists crossed on chest", tip:"💡 Amor = love" },
+    "deaf":       { emoji:"👂", desc:"Index finger at ear then at chin (ear + speech = deaf)", tip:"💡 Surdo in LIBRAS" },
+    "friend":     { emoji:"🤝", desc:"Index fingers hook once (single hook, simpler than ASL)", tip:"💡 Amigo = friend" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes arc outward from body", tip:"💡 Família arc" },
+    "water":      { emoji:"💧", desc:"W handshape at mouth, slight pour tilt", tip:"💡 Água = water" },
+    "eat":        { emoji:"🍽️", desc:"O handshape brought to mouth repeatedly", tip:"💡 Comer = eat" },
+    "mother":     { emoji:"👩", desc:"M handshape taps chin twice", tip:"💡 Mãe = mother" },
+    "father":     { emoji:"👨", desc:"P handshape at forehead", tip:"💡 Pai = father" },
+    "home":       { emoji:"🏠", desc:"Fingertips touch chin then cheek (ASL-borrowed)", tip:"💡 Casa = home" },
+    "more":       { emoji:"➕", desc:"Fingertips tap together twice", tip:"💡 Mais = more" },
+    "pain":       { emoji:"😣", desc:"Index fingers twist toward each other at pain site", tip:"💡 Dor = pain" },
+    "i love you": { emoji:"🤟", desc:"ILY handshape (adopted internationally)", tip:"💡 Eu te amo via ILY" },
+    "name":       { emoji:"🏷️", desc:"N handshape taps back of non-dominant hand", tip:"💡 Nome = name" },
+  },
+
+  KSL: {
+    "hello":      { emoji:"👋", desc:"Both hands raised and waved simultaneously toward listener", tip:"💡 KSL greetings are warm and two-handed" },
+    "thank you":  { emoji:"🙏", desc:"Both hands together at chest, bow head slightly (감사합니다)", tip:"💡 Korean bow integrated into the sign" },
+    "yes":        { emoji:"✅", desc:"Fist nods downward — same as BSL", tip:"💡 KSL yes follows Korean head-nod culture" },
+    "no":         { emoji:"❌", desc:"Index finger crosses in front of face, X-shape pattern", tip:"💡 Korean X gesture = no/wrong" },
+    "please":     { emoji:"🙏", desc:"Both palms together, push gently toward listener with a bow", tip:"💡 Polite double-hand push with bow" },
+    "sorry":      { emoji:"😔", desc:"Both fists at chest, bow several times (죄송합니다)", tip:"💡 Formal Korean sorry includes bowing" },
+    "help":       { emoji:"🆘", desc:"One hand cups under the other and lifts both up", tip:"💡 도와주세요 — lifting motion" },
+    "stop":       { emoji:"🛑", desc:"Both palms face outward and push strongly forward", tip:"💡 Korean stop is emphatic, two-handed" },
+    "good":       { emoji:"👍", desc:"Thumbs up with eye contact and a slight nod", tip:"💡 좋아요 = good, universal thumbs-up" },
+    "bad":        { emoji:"👎", desc:"Thumbs down or downward hand wave", tip:"💡 나빠요 = bad" },
+    "love":       { emoji:"❤️", desc:"Both fists crossed on chest", tip:"💡 사랑해요 = I love you" },
+    "deaf":       { emoji:"👂", desc:"Index points to ear, then waves outward (cannot hear)", tip:"💡 청각장애 — ear then away" },
+    "friend":     { emoji:"🤝", desc:"Index fingers link horizontally and sway", tip:"💡 친구 — linked friends sway" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"F handshapes trace a wide arc forward, two-handed", tip:"💡 가족 — family circle" },
+    "water":      { emoji:"💧", desc:"W handshape at mouth, downward pour motion", tip:"💡 물 = water, pour motion" },
+    "eat":        { emoji:"🍽️", desc:"Chopstick-holding shape brought to mouth twice", tip:"💡 밥 먹다 = eat, chopstick shape" },
+    "mother":     { emoji:"👩", desc:"M handshape at chin, tap twice", tip:"💡 엄마 = mother" },
+    "father":     { emoji:"👨", desc:"F handshape at forehead", tip:"💡 아빠 = father" },
+    "home":       { emoji:"🏠", desc:"Fingertips form a roof above head, then lower together", tip:"💡 집 = home, roof shape" },
+    "more":       { emoji:"➕", desc:"Both open palms pat together twice", tip:"💡 더 = more" },
+    "pain":       { emoji:"😣", desc:"Both index fingers point at each other near pain area", tip:"💡 아프다 = pain" },
+    "i love you": { emoji:"🤟", desc:"ILY handshape or: point to self, cross chest, point to listener", tip:"💡 사랑해" },
+    "name":       { emoji:"🏷️", desc:"N handshape at forehead, tap once", tip:"💡 이름 = name" },
+  },
+
+  CSL: {
+    "hello":      { emoji:"👋", desc:"Single hand raised, fingers together, slight wave", tip:"💡 CSL hello is minimal and formal" },
+    "thank you":  { emoji:"🙏", desc:"Right hand over left hand, both move forward together", tip:"💡 谢谢 = thank you, two-hand forward" },
+    "yes":        { emoji:"✅", desc:"Fist nods forward (wrist nod)", tip:"💡 是 = yes" },
+    "no":         { emoji:"❌", desc:"Index finger crosses in front of face (X-shape)", tip:"💡 不 = no, X gesture" },
+    "please":     { emoji:"🙏", desc:"Both palms push gently forward with a slight bow", tip:"💡 请 = please" },
+    "sorry":      { emoji:"😔", desc:"Fist circles chest gently (borrowed from ASL)", tip:"💡 对不起 = sorry" },
+    "help":       { emoji:"🆘", desc:"Two cupped hands lift upward together", tip:"💡 帮助 = help, mutual lifting" },
+    "stop":       { emoji:"🛑", desc:"Open palm faces outward firmly, pushed forward once", tip:"💡 停 = stop" },
+    "good":       { emoji:"👍", desc:"Thumbs up, slight forward nod", tip:"💡 好 = good" },
+    "bad":        { emoji:"👎", desc:"Thumbs down", tip:"💡 坏 = bad" },
+    "love":       { emoji:"❤️", desc:"Both fists crossed at chest", tip:"💡 爱 = love" },
+    "deaf":       { emoji:"👂", desc:"Index touches ear, then flat hand move away horizontally", tip:"💡 聋 = deaf — sound leaves the ear" },
+    "friend":     { emoji:"🤝", desc:"Index fingers hook, then reverse (same as ASL)", tip:"💡 朋友 = friend" },
+    "family":     { emoji:"👨‍👩‍👧", desc:"Both F handshapes rotate in a horizontal circle", tip:"💡 家庭 = family circle" },
+    "water":      { emoji:"💧", desc:"W handshape at mouth, tilt as if pouring", tip:"💡 水 = water, pouring tilt" },
+    "eat":        { emoji:"🍽️", desc:"Three fingers (chopstick) brought to mouth twice", tip:"💡 吃 = eat, chopstick motion" },
+    "mother":     { emoji:"👩", desc:"M handshape at chin, tap once", tip:"💡 妈妈 = mother" },
+    "father":     { emoji:"👨", desc:"P handshape at forehead", tip:"💡 爸爸 = father" },
+    "home":       { emoji:"🏠", desc:"Fingertips form a roof shape, both hands lower together", tip:"💡 家 = home, roof trace" },
+    "more":       { emoji:"➕", desc:"Both open palms pat together twice", tip:"💡 更多 = more" },
+    "pain":       { emoji:"😣", desc:"Both index fingers twist toward each other at the site", tip:"💡 痛 = pain" },
+    "i love you": { emoji:"🤟", desc:"ILY handshape (internationally adopted)", tip:"💡 我爱你 via ILY" },
+    "name":       { emoji:"🏷️", desc:"N handshape taps back of non-dominant hand", tip:"💡 名字 = name" },
+  }
+};
+
+
+// ── Wire GestureLibraries → LANG_DICT ───────────────────────────────────────
+// Runs inline (all const declarations above are fully evaluated at this point)
+GestureLibraries = LANG_DICT;
+
+// ── Initial UI seed — runs after the full script is parsed & DOM is ready ───
+window.addEventListener('load', () => {
+
+  // Update word counts from the real LANG_DICT now that it's populated
+  Object.keys(LIBRARIES).forEach(lang => {
+    const dict = LANG_DICT[lang];
+    if (dict) LIBRARIES[lang].count = Object.keys(dict).length;
+  });
+  refreshSpeechPageInfo();
+});
+
+// lookupGesture() — thin adapter kept for backward-compat with compareWord()
+function lookupGesture(word, lang) {
+  const result = get_gesture(word, lang);
+  if (!result.isFingerOnly && result.source === lang)
+    return { entry: result, source: lang, fallback: false };
+  return { entry: null, source: null, fallback: true };
+}
+
+// Build fingerspelling display based on alphabet type
+function fingerspellWord(word, lang) {
+  const alpha = ALPHABET_TYPE[lang] || ALPHABET_TYPE["ASL"];
+  const letters = word.toUpperCase().split('').join(' → ');
+  const handNote = alpha.hands === "two"
+    ? "⚠️ <strong>TWO-HANDED</strong> manual alphabet"
+    : "☝️ One-handed manual alphabet";
+  return { letters, handNote, note: alpha.note, special: alpha.special };
+}
+
+// ── showSign(word, language) — branching lookup with visual feedback ──
+document.getElementById('showBtn').onclick = showSign;
+document.getElementById('wordInput').onkeydown = e => { if(e.key==='Enter') showSign(); };
+
+function showSign() {
+  const raw   = document.getElementById('wordInput').value.trim();
+  const input = raw.toLowerCase();
+  const box   = document.getElementById('signResult');
+  if (!input) { box.innerHTML='<p style="color:#999">Please type a word first.</p>'; return; }
+
+  const lang      = SELECTED_LANGUAGE;
+  const langCfg   = LANG_CONFIG[lang] || { country: lang };
+  const langLabel = langCfg.country || lang;
+
+  // ── Core lookup: TARGET_GESTURE = GestureLibraries[selectedLanguage][inputText]
+  const gesture = get_gesture(input, lang);
+
+  // ── Fingerspelling block (always shown at bottom)
+  const { letters, handNote, note, special } = fingerspellWord(input, lang);
+  const fingerspellBlock = `
+    <div style="border-top:1px solid #000;padding-top:16px;margin-top:8px">
+      <div style="font-size:0.65rem;font-weight:700;color:#666;letter-spacing:2px;margin-bottom:8px">FINGERSPELLING (${lang})</div>
+      <div style="font-size:0.8rem;color:#555;margin-bottom:8px">${handNote}</div>
+      ${special ? `<div style="font-size:0.75rem;color:#666;margin-bottom:10px">📌 ${special}</div>` : ''}
+      <span style="font-size:1.8rem;font-weight:900;letter-spacing:4px">${letters}</span>
+      <div style="font-size:0.72rem;color:#999;margin-top:8px">${note}</div>
+    </div>`;
+
+  // ── Grammar & structure note for selected language
+  const grammarNote = getGrammarNote(lang);
+  const kslNote = lang === "KSL"
+    ? `<div style="border-left:3px solid #000;padding:8px 12px;margin:12px 0;background:#f9f9f9;font-size:0.78rem;color:#444">
+        <strong>KSL Note:</strong> Korean Sign Language shares handshapes with Japanese Sign Language (JSL)
+        due to historical influence. Grammar follows SOV order with topic-comment structure.
+        Bowing is a pragmatic marker — slight bows indicate politeness or emphasis.
+       </div>`
+    : lang === "JSL"
+    ? `<div style="border-left:3px solid #000;padding:8px 12px;margin:12px 0;background:#f9f9f9;font-size:0.78rem;color:#444">
+        <strong>JSL Note:</strong> Japanese Sign Language uses classifiers heavily and
+        integrates mouth patterns from Japanese speech. SOV structure — verb always at end.
+       </div>`
+    : lang === "DGS"
+    ? `<div style="border-left:3px solid #000;padding:8px 12px;margin:12px 0;background:#f9f9f9;font-size:0.78rem;color:#444">
+        <strong>DGS Note:</strong> German SL includes unique Umlaut handshapes (Ä, Ö, Ü, ß).
+        Mouth patterns from German speech carry grammatical meaning.
+       </div>`
+    : "";
+
+  // ── Status badge
+  let badge;
+  if (gesture.isFingerOnly) {
+    badge = `<div style="display:inline-block;padding:4px 12px;background:#f5f5f5;border:1px solid #000;font-size:0.7rem;font-weight:700;letter-spacing:2px;margin-bottom:16px;color:#555">
+      Gesture not found in ${langLabel} — Fingerspelling instead
+    </div>`;
+  } else if (gesture.isFallback) {
+    badge = `<div style="display:inline-block;padding:4px 12px;background:#f5f5f5;border:1px solid #000;font-size:0.7rem;font-weight:700;letter-spacing:2px;margin-bottom:16px;color:#333">
+      ⚠️ Gesture only available in ASL — showing ASL version
+    </div>`;
+  } else {
+    badge = `<div style="display:inline-block;padding:4px 12px;background:#000;font-size:0.7rem;font-weight:700;letter-spacing:2px;margin-bottom:16px;color:#fff">
+      Displaying ${langLabel.toUpperCase()} (${lang}) gesture for: ${raw.toUpperCase()}
+    </div>`;
+  }
+
+  if (!gesture.isFingerOnly) {
+    box.innerHTML = `
+      ${badge}
+      <div style="font-size:4rem;margin-bottom:12px">${gesture.emoji}</div>
+      <div style="font-size:1.4rem;font-weight:900;margin-bottom:4px">${raw.toUpperCase()}</div>
+      <p style="font-size:1rem;color:#333;margin-bottom:8px">✋ ${gesture.desc}</p>
+      <p style="font-size:0.85rem;color:#666;margin-bottom:4px">${gesture.tip}</p>
+      ${kslNote}
+      <div style="font-size:0.72rem;color:#aaa;margin-bottom:16px">📐 ${grammarNote}</div>
+      ${fingerspellBlock}`;
+  } else {
+    box.innerHTML = `
+      ${badge}
+      <p style="color:#333;margin-bottom:16px">
+        No gesture found for <strong>"${raw.toUpperCase()}"</strong> in ${langLabel}.
+      </p>
+      ${kslNote}
+      <div style="font-size:0.72rem;color:#aaa;margin-bottom:16px">📐 ${grammarNote}</div>
+      ${fingerspellBlock}`;
+  }
+}
+
+// ─── COMPARE LANGUAGES ───────────────────────────────────────
+// Expanded to 8 words, all 10 languages, sourced from LANG_DICT
+const COMPARE_WORDS = ["hello","thank you","help","stop","deaf","love","friend","name"];
+
+function compareWord() {
+  const raw   = document.getElementById('compareInput').value.trim();
+  const input = raw.toLowerCase();
+  const grid  = document.getElementById('compareGrid');
+  if (!input) { grid.innerHTML='<p style="color:#999; text-align:center; width:100%; grid-column:1/-1;">Please type a word first.</p>'; return; }
+
+  const ALL_LANGUAGES = [
+    { code: 'ASL',    name: 'American', flag: '🇺🇸' },
+    { code: 'BSL',    name: 'British',  flag: '🇬🇧' },
+    { code: 'ISL',    name: 'Indian',   flag: '🇮🇳' },
+    { code: 'JSL',    name: 'Japanese', flag: '🇯🇵' },
+    { code: 'AUSLAN', name: 'Australian', flag: '🇦🇺' },
+    { code: 'LSF',    name: 'French',   flag: '🇫🇷' },
+    { code: 'DGS',    name: 'German',   flag: '🇩🇪' },
+    { code: 'LIBRAS', name: 'Brazilian', flag: '🇧🇷' },
+    { code: 'KSL',    name: 'Korean',   flag: '🇰🇷' },
+    { code: 'CSL',    name: 'Chinese',  flag: '🇨🇳' },
+  ];
+
+  grid.innerHTML = ALL_LANGUAGES.map(lang => {
+    // Check if the word exists in the dictionary for that language (falling back to LIBRARIES or dummy check)
+    const hasGesture = GestureLibraries[lang.code] && GestureLibraries[lang.code][input];
+    
+    // As requested: /gestures/[lang]/[word].gif
+    const imgPath = `/gestures/${lang.code.toLowerCase()}/${input}.gif`;
+    
+    // UI Layout per card
+    let content = "";
+    if (hasGesture) {
+         content = `<img src="${imgPath}" alt="${raw} in ${lang.name}" style="width:100%; max-height:150px; object-fit:contain; margin-top:10px; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.1);" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/%3E%3Ctext x=%2250%22 y=%2250%22 font-family=%22Arial%22 font-size=%2212%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 fill=%22%23555%22%3EMissing GIF%3C/text%3E%3C/svg%3E'" />
+         <div style="font-size:0.75rem; color:#16a34a; font-weight:bold; margin-top:8px;">✓ Available</div>`;
+    } else {
+         content = `<div style="margin-top:10px; padding:20px 10px; background:#f5f5f5; border:1px dashed #ccc; font-size:0.85rem; color:#666;">
+            Not available in ${lang.name}
+         </div>
+         <div style="font-size:0.75rem; color:#d97706; font-weight:bold; margin-top:8px;">⚠️ Fingerspelling</div>`;
+    }
+
+    return `<div class="compare-card" style="border:2px solid #000; padding:16px; text-align:center; background:#fff; pointer-events:auto;">
+      <div style="font-size:2.5rem; margin-bottom:4px;">${lang.flag}</div>
+      <div style="font-weight:900; font-size:1.2rem;">${lang.code}</div>
+      <div style="font-size:0.8rem; color:#666; margin-bottom:8px;">${lang.name}</div>
+      ${content}
+    </div>`;
+  }).join('');
+}
+
+// Ensure events are bound
+if (document.getElementById('compareBtn')) {
+    document.getElementById('compareBtn').onclick = compareWord;
+}
+if (document.getElementById('compareSpeakBtn')) {
+    document.getElementById('compareSpeakBtn').onclick = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) { alert("Speech not supported in this browser."); return; }
+        const rec = new SpeechRecognition();
+        rec.lang = 'en-US';
+        rec.onstart = () => { document.getElementById('compareInput').placeholder = "Listening..."; };
+        rec.onresult = (e) => {
+            document.getElementById('compareInput').value = e.results[0][0].transcript;
+            compareWord();
+        };
+        rec.onend = () => { document.getElementById('compareInput').placeholder = "Type a word or phrase..."; };
+        rec.start();
+    };
+
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+</body>
+</html>

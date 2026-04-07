@@ -1,0 +1,68 @@
+::1 - - [07/Apr/2026 10:28:17] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 10:28:17] code 404, message File not found
+::1 - - [07/Apr/2026 10:28:17] "GET /favicon.ico HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 10:32:32] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 10:39:29] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 10:41:59] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 10:43:03] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 10:43:18] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 10:48:50] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:02:40] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:03:03] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:04:26] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:04:41] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:04:41] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:06:42] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:06:43] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:06:43] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:06:43] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:06:56] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:07:14] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:07:21] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:11:21] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:11:26] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:12:28] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:24:33] "GET / HTTP/1.1" 200 -
+::1 - - [07/Apr/2026 11:24:34] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/asl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/bsl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/jsl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/isl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/auslan/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/lsf/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/dgs/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] code 404, message File not found
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/ksl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/csl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:24:41] "GET /gestures/libras/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/asl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/jsl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/lsf/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/bsl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/isl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/auslan/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/csl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/dgs/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/ksl/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:25:00] code 404, message File not found
+::1 - - [07/Apr/2026 11:25:00] "GET /gestures/libras/hello.gif HTTP/1.1" 404 -
+::1 - - [07/Apr/2026 11:29:59] "GET / HTTP/1.1" 304 -
+::1 - - [07/Apr/2026 11:33:24] "GET / HTTP/1.1" 304 -
