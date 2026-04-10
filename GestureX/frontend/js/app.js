@@ -145,8 +145,7 @@ function selectLanguage(lang) {
     document.getElementById('gesture-lang-badge').textContent = lang;
     document.getElementById('speech-lang-badge').textContent = lang;
     
-    Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-    }).catch(console.error);
+    Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
 }
 
 function selectMode(mode) {
@@ -160,8 +159,7 @@ function selectMode(mode) {
         document.getElementById('speech-to-gesture').classList.remove('hidden');
     }
     
-    Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-    }).catch(console.error);
+    Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
 }
 
 function goBack() {
@@ -198,8 +196,7 @@ async function startCamera() {
             fingerspellCtx = ctx;
 
             // Force ASL alphabet for fingerspelling detection (preferred for name spelling)
-            const sessRes = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-            });
+            const sessRes = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
             const sessJson = await sessRes.json();
             if (sessJson && sessJson.session_id) {
                 fingerspellSessionId = sessJson.session_id;
@@ -239,7 +236,7 @@ function stopCamera() {
     }
     if (isFingerSpelling && fingerspellSessionId) {
         Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-        }).then(res => res.json()).then(js => {
+        .then(res => res.json()).then(js => {
             if (js && js.detected_name) {
                 addToSentence(js.detected_name);
             }
@@ -461,8 +458,7 @@ async function convertToGesture() {
     resultsEl.innerHTML = '<div class="placeholder"><p>Finding gestures...</p></div>';
     
     try {
-        var res = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-        });
+        var res = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
         var result = await res.json();
         displayGestureResults(result, text);
     } catch (err) {
@@ -689,8 +685,7 @@ async function startFingerspellCamera() {
     
     try {
         // Start a new session
-        const sessionRes = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-        });
+        const sessionRes = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
         const sessionData = await sessionRes.json();
         
         if (sessionData.success) {
@@ -796,8 +791,7 @@ async function captureAndDetectLetter() {
         const imageData = fingerspellCanvas.toDataURL('image/jpeg', 0.8);
         
         // Send to detection API (backend expects /frame)
-        const res = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})})
-        });
+        const res = await Promise.resolve({ok:true, json:()=>Promise.resolve({success:false})});
         
         // Count frames sent for debug
         fingerspellFramesSent++;

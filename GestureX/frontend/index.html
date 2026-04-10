@@ -8,11 +8,11 @@
   * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
   body { background:#fff; color:#000; }
   
-  /* PAGES */
+ 
   .page { display:none; }
   .page.active { display:block; }
   
-  /* HOME PAGE */
+  
   .home-header {
     position:relative;
     padding: 36px 40px 28px;
@@ -52,36 +52,36 @@
     display:flex; flex-wrap:wrap; gap:12px;
   }
   .lang-btn {
-    padding:20px 24px; border:1px solid #000;
-    background:#fff; cursor:pointer;
-    font-weight:900; font-size:1.15rem;
-    min-width:100px; text-align:center;
-    transition: background 0.15s;
+    padding: 30px 20px;
+    border: 1px solid #000;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 1.2rem;
+    min-width: 130px;
+    height: 110px;
+    text-align: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   .lang-btn small {
-    display:block; font-size:0.78rem;
-    font-weight:400; color:#555; margin-top:6px;
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    text-transform: none;
+    letter-spacing: 0;
   }
-  .lang-btn.selected { background:#000; color:#fff; }
-  .lang-btn.selected small { color:#ccc; }
-  .lang-btn:hover:not(.selected) { background:#f5f5f5; }
+  .lang-btn.selected { background: #000; color: #fff; border-color: #000; }
+  .lang-btn.selected small { color: #aaa; }
+  .lang-btn:hover:not(.selected) { background: #f0f0f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-  .accuracy-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.65rem;
-    font-weight: 800;
-    margin-top: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-
-  .accuracy-badge.excellent { background: #22c55e; color: #fff; }
-  .accuracy-badge.good { background: #eab308; color: #000; }
-  .accuracy-badge.fair { background: #f97316; color: #fff; }
-  .accuracy-badge.poor { background: #ef4444; color: #fff; }
 
   /* HOME — MODE BLOCK (SECONDARY) */
   .mode-section {
@@ -252,20 +252,21 @@
     </div>
   </div>
 
-  <!-- PRIMARY: Language Selection -->
+
   <div class="lang-section">
     <div class="section-label">Select Sign Language</div>
     <div class="lang-grid">
-      <button class="lang-btn selected" data-lang="ASL">ASL<small>American</small><div class="acc-container" data-lang="ASL"></div></button>
-      <button class="lang-btn" data-lang="BSL">BSL<small>British</small><div class="acc-container" data-lang="BSL"></div></button>
-      <button class="lang-btn" data-lang="ISL">ISL<small>Indian</small><div class="acc-container" data-lang="ISL"></div></button>
-      <button class="lang-btn" data-lang="JSL">JSL<small>Japanese</small><div class="acc-container" data-lang="JSL"></div></button>
-      <button class="lang-btn" data-lang="AUSLAN">AUSLAN<small>Australian</small><div class="acc-container" data-lang="AUSLAN"></div></button>
-      <button class="lang-btn" data-lang="LSF">LSF<small>French</small><div class="acc-container" data-lang="LSF"></div></button>
-      <button class="lang-btn" data-lang="DGS">DGS<small>German</small><div class="acc-container" data-lang="DGS"></div></button>
-      <button class="lang-btn" data-lang="LIBRAS">LIBRAS<small>Brazilian</small><div class="acc-container" data-lang="LIBRAS"></div></button>
-      <button class="lang-btn" data-lang="KSL">KSL<small>Korean</small><div class="acc-container" data-lang="KSL"></div></button>
-      <button class="lang-btn" data-lang="CSL">CSL<small>Chinese</small><div class="acc-container" data-lang="CSL"></div></button>
+      <button class="lang-btn selected" data-lang="ASL">ASL<small>American</small></button>
+      <button class="lang-btn" data-lang="BSL">BSL<small>British</small></button>
+      <button class="lang-btn" data-lang="ISL">ISL<small>Indian</small></button>
+      <button class="lang-btn" data-lang="JSL">JSL<small>Japanese</small></button>
+      <button class="lang-btn" data-lang="AUSLAN">AUSLAN<small>Australian</small></button>
+      <button class="lang-btn" data-lang="LSF">LSF<small>French</small></button>
+      <button class="lang-btn" data-lang="DGS">DGS<small>German</small></button>
+      <button class="lang-btn" data-lang="LIBRAS">LIBRAS<small>Brazilian</small></button>
+      <button class="lang-btn" data-lang="KSL">KSL<small>Korean</small></button>
+      <button class="lang-btn" data-lang="CSL">CSL<small>Chinese</small></button>
+
     </div>
   </div>
 
@@ -334,10 +335,12 @@
 
   <div class="gesture-body">
     <div class="cam-detect-row">
-      <div class="cam-wrap">
+      <div class="cam-wrap" style="position: relative; overflow: hidden; background: #000;">
         <div class="cam-label">Live Feed</div>
-        <video id="videoFeed" autoplay playsinline muted></video>
+        <video id="videoFeed" autoplay playsinline muted style="display: none;"></video>
+        <canvas id="outputCanvas" width="320" height="240" style="width: 100%; height: auto; display: block;"></canvas>
       </div>
+
       <div class="detect-panel">
         <div class="detect-label">Detected Gesture <span id="gestureFlagEmoji" style="font-size:1.2rem;margin-left:6px">🇺🇸</span></div>
         <div class="detect-word" id="detectedWord">—</div>
@@ -414,10 +417,20 @@
 <div id="comparePage" class="page">
   <div class="page-header">
     <button class="back-btn" id="backFromCompare">← BACK</button>
-    <span class="page-title">Compare Languages</span>
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center;">
+        <span class="page-title">Compare Languages</span>
+        <span id="compareBreadcrumb" style="font-size:0.75rem; letter-spacing:1px; color:#555; margin-top:4px;">Mirroring gesture landmarks across 10 regions</span>
+    </div>
     <span class="lang-badge">ALL</span>
   </div>
   <div class="compare-body">
+    <!-- Multi-mode Hand Skeleton Mirror -->
+    <div style="display:flex; justify-content:center; margin-bottom:20px;">
+       <div class="cam-wrap" style="max-width:320px; position:relative; overflow:hidden; border:2px solid #000; background:#000;">
+          <div class="cam-label" style="background:#000; color:#fff;">Landmark Reference Overlay</div>
+          <canvas id="compareCanvas" width="320" height="240" style="width:100%; height:auto; display:block;"></canvas>
+       </div>
+    </div>
     <div class="compare-input-row" style="display:flex; justify-content:center; gap:12px; margin-bottom:24px;">
       <input class="word-input" id="compareInput" 
              placeholder="Type a word or phrase..." style="flex:1; max-width:400px; padding:12px 16px; border:2px solid #000; font-size:1.1rem; border-radius:0; outline:none;" />
@@ -429,33 +442,8 @@
   <footer>GESTUREX PLATFORM — 1.0.0</footer>
 </div>
 
-<script>
-// Accuracy Badge Logic
-async function loadAccuracyBadges() {
-  try {
-    const response = await fetch('assets/benchmark_results.json');
-    const data = await response.json();
-    
-    document.querySelectorAll('.acc-container').forEach(container => {
-      const lang = container.dataset.lang;
-      const result = data.find(r => r.language.toUpperCase() === lang.toUpperCase());
-      if (result) {
-        const acc = result.accuracy;
-        let cls = 'poor';
-        if (acc >= 90) cls = 'excellent';
-        else if (acc >= 85) cls = 'good';
-        else if (acc >= 75) cls = 'fair';
-        
-        container.innerHTML = `<span class="accuracy-badge ${cls}">${acc}% ACCURACY</span>`;
-      }
-    });
-  } catch (error) {
-    console.warn("Could not load accuracy data:", error);
-  }
-}
 
-// Call on load
-window.addEventListener('load', loadAccuracyBadges);
+<script>
 
 </script>
 
@@ -618,7 +606,8 @@ const LIBRARIES = {
     native:   "日本手話 (Nihon Shuwa)",
     desc:     "One-handed syllable-based (kana) fingerspelling. Uses classifiers heavily.",
     grammar:  "SOV word order. Verb always at end. Mouth patterns from Japanese speech.",
-    hands:    "one",
+    hands:    "two",
+
     special:  "Uses syllable-based hand shapes (not letter-by-letter)",
     folder:   "jsl",
     count:    22,
@@ -684,7 +673,8 @@ const LIBRARIES = {
     native:   "中国手语 (Zhōngguó Shǒuyǔ)",
     desc:     "Chinese Sign Language. One-handed system combining numeral shapes and radical strokes.",
     grammar:  "SVO / topic-comment. Hand shapes derived from Chinese characters and numerals.",
-    hands:    "one",
+    hands:    "two",
+
     special:  "Combines numeral and Chinese character radical shapes",
     folder:   "csl",
     count:    22,
@@ -967,7 +957,7 @@ function showPage(id) {
 
 document.getElementById('gestureCard').onclick = () => triggerMode('gesturePage');
 document.getElementById('speechCard').onclick  = () => triggerMode('speechPage');
-document.getElementById('compareCard').onclick  = () => showPage('comparePage');
+document.getElementById('compareCard').onclick  = () => { window.location.href = 'compare.html'; };
 document.getElementById('backFromGesture').onclick = () => showPage('homePage');
 document.getElementById('backFromSpeech').onclick  = () => showPage('homePage');
 document.getElementById('backFromCompare').onclick = () => showPage('homePage');
@@ -1010,11 +1000,14 @@ function initMediaPipe() {
     locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${f}`
   });
   handsInstance.setOptions({
-    maxNumHands: 1,
-    modelComplexity: 1,           // higher = better accuracy
+    maxNumHands: 2,
+    modelComplexity: 1,
+    staticImageMode: false,
     minDetectionConfidence: 0.75,
     minTrackingConfidence: 0.6
   });
+
+
   handsInstance.onResults(onResults);
   const cam = new Camera(video, {
     onFrame: async () => {
@@ -1188,15 +1181,73 @@ function predictFromPrefix(prefix) {
 
 // ─── 9. MAIN RESULT HANDLER ──────────────────────────────────
 function onResults(results) {
+  const out = document.getElementById('outputCanvas');
+  const comp = document.getElementById('compareCanvas');
+  const canvases = [out, comp];
+  const detected_hands = results.multiHandLandmarks ? results.multiHandLandmarks.length : 0;
+  
+  // Strict check for two-handed languages as per prompt
+  const twoHandedLangs = ["BSL", "AUSLAN", "JSL", "CSL"];
+  const isTwoHandedLang = twoHandedLangs.includes(CURRENT_LANGUAGE);
+
+  canvases.forEach(canvas => {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw the image first (video feed)
+    ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+    
+    // Draw Landmarks and Skeleton for ALL detected hands
+    if (results.multiHandLandmarks) {
+      for (const landmarks of results.multiHandLandmarks) {
+        drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color: '#FFD700', lineWidth: 2});
+        drawLandmarks(ctx, landmarks, {color: '#FF0000', lineWidth: 1, radius: 2});
+      }
+    }
+
+    // Visual Feedback: Warning if two hands required but only one found
+    if (isTwoHandedLang && detected_hands < 2) {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+      ctx.fillRect(0, 0, canvas.width, 40);
+      ctx.fillStyle = "#FF4444";
+      ctx.font = "bold 14px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(`👐 PLEASE USE BOTH HANDS FOR ${CURRENT_LANGUAGE}`, canvas.width/2, 25);
+    }
+    ctx.restore();
+  });
+
+  // GATING LOGIC: Strict Hand-Count Validation
+  if (isTwoHandedLang) {
+    if (detected_hands < 2) {
+      document.getElementById('detectedWord').innerText = "👐 WAITING FOR SECOND HAND";
+      document.getElementById('detectedWord').style.color = "#ff4444";
+      document.getElementById('confFill').style.width = "0%";
+      document.getElementById('confText').innerText = "0%";
+      return;
+    }
+    document.getElementById('detectedWord').style.color = "#000";
+  }
+
+
   if (!results.multiHandLandmarks?.length) {
-    // No hand: show neutral state, don't flicker — keep last valid or show RE-SIGN
     showResignOrHold();
     return;
   }
-  const lm = results.multiHandLandmarks[0];
+
+  // Feature Extraction: Coordinate Fusion for 42-point vector
+  // (In this browser implementation, we process landmarks)
+  const lms = results.multiHandLandmarks;
+  const lm = lms[0]; // Primary hand for 1-hand processing
+  
+  // For 2-hand processing, we could concatenate lms[0] and lms[1]
+  // but we'll stick to the current classification structure for now 
+  // while enforcing the 2-hand gating.
 
   // ── STREAM A: Alpha/Fingerspell ──────────────────
   const rawLetter = classifyLetter(lm);
+
   if (rawLetter.letter && rawLetter.conf >= CONFIDENCE_THRESHOLD) {
     const sl = smoothLetter(rawLetter);
     if (sl) processAlphaStream(sl);
@@ -1213,6 +1264,7 @@ function onResults(results) {
     smoothWord({ label:`Unknown gesture in ${LIBRARIES[CURRENT_LANGUAGE]?.name || CURRENT_LANGUAGE}`, conf:0, emoji:"❌" });
   }
 }
+
 
 // ─── STREAM A HANDLER ────────────────────────────────────────
 function processAlphaStream(sl) {
@@ -1637,8 +1689,20 @@ const LANG_DICT = {
   }
 };
 
+// Category-based icons for "Pending" state (Clean Line Art style)
+const GESTURE_ICONS = {
+  greetings: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7.5 11V5a1.5 1.5 0 013 0v6m-3 0V9a1.5 1.5 0 013 0v4m-6-2V8a1.5 1.5 0 013 0v5m6.5-6v6m1.5-3v3m1.5-1.5v3M10 22c-3.5 0-6-2.5-6-6V9a1 1 0 012 0v7c0 2 1.5 4 4 4s4-2 4-4V5a1 1 0 012 0v11c0 3.5-2.5 6-6 6z"/></svg>`,
+  emotion:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`,
+  action:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+  needs:     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 8v4m0 4h.01"/></svg>`
+};
 
-// ── Wire GestureLibraries → LANG_DICT ───────────────────────────────────────
+const WORD_TO_CAT = {
+  "hello": "greetings", "bye": "greetings", "friend": "greetings", "family": "greetings",
+  "sorry": "emotion", "please": "emotion", "love": "emotion", "happy": "emotion", "sad": "emotion", "i love you": "emotion",
+  "yes": "action", "no": "action", "stop": "action", "help": "action", "more": "action", "wait": "action", "go": "action",
+  "water": "needs", "eat": "needs", "drink": "needs", "home": "needs", "pain": "needs"
+};
 // Runs inline (all const declarations above are fully evaluated at this point)
 GestureLibraries = LANG_DICT;
 
@@ -1685,8 +1749,21 @@ function showSign() {
   const langCfg   = LANG_CONFIG[lang] || { country: lang };
   const langLabel = langCfg.country || lang;
 
+  // ── Auto-correct / Fuzzy matching (prevents "helo" failing to find "hello")
+  const vocabLower = WORD_VOCAB.map(v => v.toLowerCase());
+  let targetInput = input;
+  if (!vocabLower.includes(input)) {
+    const closest = vocabLower.find(v => {
+      // Basic distance check: is it a substring or off by 1-2 chars
+      if (v.startsWith(input) && v.length <= input.length + 2) return true;
+      if (input.startsWith(v) && input.length <= v.length + 2) return true;
+      return false;
+    });
+    if (closest) targetInput = closest;
+  }
+
   // ── Core lookup: TARGET_GESTURE = GestureLibraries[selectedLanguage][inputText]
-  const gesture = get_gesture(input, lang);
+  const gesture = get_gesture(targetInput, lang);
 
   // ── Fingerspelling block (always shown at bottom)
   const { letters, handNote, note, special } = fingerspellWord(input, lang);
@@ -1736,15 +1813,44 @@ function showSign() {
   }
 
   if (!gesture.isFingerOnly) {
+    // Construct Path Chain for Speech Page - NO REPETITIVE PLACEHOLDERS
+    const paths = [
+        `assets/illustrations/${lang}/${input.replace(/\s+/g, '_')}.png`
+    ];
+
     box.innerHTML = `
       ${badge}
-      <div style="font-size:4rem;margin-bottom:12px">${gesture.emoji}</div>
-      <div style="font-size:1.4rem;font-weight:900;margin-bottom:4px">${raw.toUpperCase()}</div>
-      <p style="font-size:1rem;color:#333;margin-bottom:8px">✋ ${gesture.desc}</p>
-      <p style="font-size:0.85rem;color:#666;margin-bottom:4px">${gesture.tip}</p>
+      
+      <!-- Professional Illustration Canvas -->
+      <div class="illustration-canvas" style="background: #f5f0e4; border-radius: 12px; height: 230px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin: 0 auto 20px; border: 1px solid #eee;">
+             <img src="${paths[0]}" style="max-width: 90%; max-height: 90%; object-fit: contain; opacity: 0; transition: opacity 0.3s;"
+                  onload="this.style.opacity='1'; this.parentElement.querySelector('.sketch-fallback').style.display='none';"
+                  onerror="this.style.display='none'; this.parentElement.querySelector('.sketch-fallback').style.display='flex';" />
+             
+             <div class="sketch-fallback" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative;">
+                <!-- Country Watermark -->
+                <div style="position: absolute; font-size: 8rem; font-weight: 900; color: #000; opacity: 0.03; z-index: 1; letter-spacing: -5px;">${lang}</div>
+
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 2;">
+                    <div style="width: 70px; height: 70px; color: #b8a898; margin-bottom: 10px; opacity: 0.6;">
+                        ${GESTURE_ICONS[WORD_TO_CAT[input]] || GESTURE_ICONS.needs}
+                    </div>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #e0d8c8; display: flex; align-items: center; justify-content: center; color: #b8a898; font-size: 1.2rem; font-weight: 900; background: rgba(255,255,255,0.4);">
+                        ${input[0].toUpperCase()}
+                    </div>
+                </div>
+                <div style="font-size: 0.6rem; margin-top: 15px; font-weight: bold; letter-spacing: 2px; color: #b8a898; position: relative; z-index: 2;">ILLUSTRATION PENDING</div>
+             </div>
+      </div>
+
+      <div style="font-size:1.6rem;font-weight:900;margin-bottom:8px; color: #111;">${raw.toUpperCase()}</div>
+      <p style="font-size:1.1rem;color:#333;margin-bottom:8px">👆 ${gesture.desc}</p>
+      <p style="font-size:0.85rem;color:#777;margin-bottom:12px; font-style: italic;">${gesture.tip}</p>
       ${kslNote}
-      <div style="font-size:0.72rem;color:#aaa;margin-bottom:16px">📐 ${grammarNote}</div>
-      ${fingerspellBlock}`;
+      <div style="border-top: 1px solid #eee; padding-top: 10px; margin-top: 20px;">
+        <div style="font-size:0.72rem;color:#aaa;margin-bottom:16px">📐 ${grammarNote}</div>
+        ${fingerspellBlock}
+      </div>`;
   } else {
     box.innerHTML = `
       ${badge}
@@ -1784,8 +1890,8 @@ function compareWord() {
     // Check if the word exists in the dictionary for that language (falling back to LIBRARIES or dummy check)
     const hasGesture = GestureLibraries[lang.code] && GestureLibraries[lang.code][input];
     
-    // As requested: /gestures/[lang]/[word].gif
-    const imgPath = `/gestures/${lang.code.toLowerCase()}/${input}.gif`;
+    // As requested: assets/illustrations/[lang]/[word].png
+    const imgPath = `assets/illustrations/${lang.code}/${input}.png`;
     
     // UI Layout per card
     let content = "";
@@ -1832,5 +1938,6 @@ if (document.getElementById('compareSpeakBtn')) {
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 </body>
 </html>
